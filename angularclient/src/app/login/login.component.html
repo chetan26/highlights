@@ -1,0 +1,28 @@
+<div class="center">
+  <h2>Login</h2>
+  <form (ngSubmit)="login()">
+    <div class="maring-top-10">
+      <label class="bold" for="username">Username:</label>
+      <input
+        type="text"
+        class="height-20"
+        id="username"
+        name="username"
+        [(ngModel)]="credentials.userName"
+      />
+    </div>
+    <div class="maring-top-10">
+      <label class="bold" for="password">Password:</label>
+      <input
+        type="password"
+        class="height-20"
+        id="password"
+        name="password"
+        [(ngModel)]="credentials.password"
+      />
+    </div>
+    <div class="maring-top-10">
+      <button type="submit" class="btn btn-primary">Login</button>
+    </div>
+  </form>
+</div>
