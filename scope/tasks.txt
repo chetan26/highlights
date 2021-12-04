@@ -1,0 +1,22 @@
+
+UI
+
+Backend
+	Spring Boot setup
+		maven/gradle build file
+		Authentication
+		Spring data mongodb
+		
+	REST APIs
+	Video clip extractor
+	Query to find the next highlight to show in the highlights portlet
+
+Integration
+	integrate all code into one box
+	get it working
+	publish it
+
+Presentation
+	PPT
+	Video
+
