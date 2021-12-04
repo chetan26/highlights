@@ -25,6 +25,10 @@ A few weeks later...
 - Knowledge retention seems to follow the Power law. 
 - It decreases as the square of time.
 
+##To start UI
+Open command prompt from following folder: 
+	angularclient > ng serve --open
+
 ## Personal Experience
 ```
 I started off learning React.
