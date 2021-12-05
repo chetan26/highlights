@@ -5,3 +5,7 @@ else
 ````gradle bootjar```` 
 
 generates ````highlights.jar```` under build/libs
+
+#Swagger
+ 
+Endpoints available at http://localhost:8080/swagger-ui.html
