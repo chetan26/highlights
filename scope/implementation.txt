@@ -2,4 +2,4 @@
 Use Mongo DB
 
 Primary use-case is html and video.
-If we are unable to get to PDF, we will skipp it.
+If we are unable to get to PDF, we will skip it.
