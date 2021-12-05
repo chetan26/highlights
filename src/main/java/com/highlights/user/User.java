@@ -1,4 +1,4 @@
-package com.highlights.common.entity;
+package com.highlights.user;
 
 public class User {
     private String userId;

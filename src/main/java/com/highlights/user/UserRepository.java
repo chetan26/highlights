@@ -1,7 +1,6 @@
-package com.highlights.common.entity;
+package com.highlights.user;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
