@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { of } from 'rxjs';
-import { HtmlData } from './html-data';
+import { ContentDetails, HtmlData } from './html-data';
 
 const baseUrl = 'http://localhost:8080';
 
@@ -26,6 +26,68 @@ export class AppService {
       data: 'my first text to test the highlight',
       selectedText: ['text', 'test'],
     });
+  }
+
+  availableContents(): Observable<ContentDetails[]> {
+    const result = [
+      {
+        id: 'content1',
+        title: 'How to be politically correct',
+        type: 'html',
+        imgUrl: '/highlights/content1/politics.jpg',
+        duration: '10m',
+        highlights: 23,
+      },
+      {
+        id: 'content2',
+        title: 'How to play Soccer',
+        type: 'pdf',
+        imgUrl: '/highlights/content2/soccer.png',
+        duration: '30m',
+        highlights: 0,
+      },
+      {
+        id: 'content3',
+        title: 'Astronomy',
+        type: 'video',
+        imgUrl: '/highlights/assets/placeholder.jpg',
+        duration: '1h',
+        highlights: 4,
+      },
+    ];
+    //return this.http.get<ContentDetails[]>(baseUrl + '/highlights/available-contents')
+    return of(result);
+  }
+
+  getViewContent(): Observable<ContentDetails[]> {
+    const result = [
+      {
+        id: 'content1',
+        title: 'How to be politically correct',
+        type: 'html',
+        imgUrl: '/highlights/content1/politics.jpg',
+        duration: '10m',
+        highlights: 23,
+      },
+      {
+        id: 'content2',
+        title: 'How to play Soccer',
+        type: 'pdf',
+        imgUrl: '/highlights/content2/soccer.png',
+        duration: '30m',
+        highlights: 0,
+      },
+      {
+        id: 'content3',
+        title: 'Astronomy',
+        type: 'video',
+        imgUrl: '/highlights/assets/placeholder.jpg',
+        duration: '1h',
+        highlights: 4,
+      },
+    ];
+    //return this.http.get<ContentDetails[]>(baseUrl + '/highlights/viewed-contents')
+    return of(result);
   }
 
   saveHighLightedText(text: string): Observable<any> {

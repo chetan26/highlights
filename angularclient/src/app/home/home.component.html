@@ -1,8 +1,16 @@
-<div class="center">
-  <h2>Following are the content type:</h2>
-  <br />
-  <a href="/html">Html render</a>
-  <br />
-  <a href="/video">Video render</a>
-  <!-- <a href="/pdf">Pdf render</a> -->
+<div class="flex">
+  <div class="grow">
+    <h2>Available content:</h2>
+    <ng-container *ngFor="let info of data">
+      <br />
+      <a href="{{ getContentUrl(info) }}">{{ info.title }}</a>
+    </ng-container>
+  </div>
+  <div class="grow">
+    <h2>Your hightlights:</h2>
+    <ng-container *ngFor="let info of data">
+      <br />
+      <a href="{{ getContentUrl(info) }}">{{ info.title }}</a>
+    </ng-container>
+  </div>
 </div>
