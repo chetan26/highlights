@@ -1,0 +1,116 @@
+
+/* Style sheet for Style Guide (c) TBL
+*/
+
+
+BODY {
+    margin-left: 25%;
+    margin-right: 10%;
+    background: white;
+    color: black;
+    font-size: 12pt;
+
+/*    font-family: Antiqua, NewCenturySchlbk, serif; */
+  }
+
+A:link
+
+{ 	color: blue;
+ 	text-decoration: underline;  }
+
+A:visited {
+	color: purple;
+	/* text-decoration: underline; */
+}
+
+A:active {
+	color: red;
+	text-decoration: underline;
+}
+
+
+
+H1, H2, H3, H4, H5. H6 {
+    color: black;
+    font-family: Ariel, sans-serif;
+}
+
+H1 { margin-left: -20%; }
+H2 { margin-left: -15%; }
+H3 { margin-left: -10%; }
+H4 { margin-left: -05%; }
+
+
+ADDRESS {
+	text-align: right;
+	text-indent: 0;
+	margin-top: 5.000000pt;
+	margin-bottom: 5.000000pt;
+	margin-right: 0.000000pt;
+	margin-left: 30%;
+	font-size: 12.000000pt;
+	font-weight: medium;
+	font-style: Italic;
+	color: #000000;
+	text-decoration: none;
+	vertical-align: baseline;
+	text-transform: none;
+}
+
+/*   Remove all this
+
+P {
+	text-align: left;
+	text-indent: 0;
+	margin-top: 5.000000pt;
+	margin-bottom: 5.000000pt;
+	margin-right: 0.000000pt;
+	margin-left: 00%;
+	font-size: 12.000000pt;
+	font-weight: medium;
+	font-style: Regular;
+	color: #000000;
+	text-decoration: none;
+	vertical-align: baseline;
+	text-transform: none;
+	font-family: NewCenturySchlbk; 
+}
+
+*/
+P.EditorNote {
+	background-color: straw;
+	font-style: Italic;
+}
+
+/*   Remove 
+
+ UL, OL {
+	text-align: left;
+	text-indent: 0;
+	margin-top: 5.000000pt;
+	margin-bottom: 5.000000pt;
+	margin-right: 0.000000pt;
+	
+	font-size: 12.000000pt;
+	font-weight: medium;
+	font-style: Regular;
+	color: #000000;
+	text-decoration: none;
+	vertical-align: baseline;
+	text-transform: none;
+	font-family: NewCenturySchlbk;
+}
+
+*/
+
+
+ PRE, SAMP, TT {
+    font-size: 10pt;
+    font-family: monospace;
+  }
+
+
+
+
+
+

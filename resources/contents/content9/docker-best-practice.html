@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="author" content="Nicolas Paris">
+    <meta name="description" content="Nicolas Paris DevOps and SRE Blog">
+    <meta name="keywords" content="blog,SRE,DevOps">
+
+    <base href="https://nsirap.com/">
+    <title>
+  Docker Best Practice, Multi-Stage Build · Nicolas Paris
+</title>
+
+    <link rel="canonical" href="https://nsirap.com/posts/039-docker-best-practice-multi-stage-build/">
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Merriweather:300,700|Source+Code+Pro:400,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css" integrity="sha256-oSrCnRYXvHG31SBifqP2PM1uje7SJUyX0nTwO2RJV54=" crossorigin="anonymous" />
+
+    
+      
+      
+      <link rel="stylesheet" href="/css/coder.min.cd087ace86754b082dec94545567f8361cba42e84f8e15edbc4a9f6e52bd1f6a.css" integrity="sha256-zQh6zoZ1Swgt7JRUVWf4Nhy6QuhPjhXtvEqfblK9H2o=" crossorigin="anonymous" media="screen" />
+    
+
+    
+
+    
+
+    
+
+    <link rel="icon" type="image/png" href="https://nsirap.com/img/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="https://nsirap.com/img/favicon-16x16.png" sizes="16x16">
+
+    
+<script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#property=607da52818216d0018a66a78&product=inline-share-buttons" async="async"></script>
+    <meta name="generator" content="Hugo 0.89.4" />
+    <script data-ad-client="ca-pub-3330607672082309" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  </head>
+
+  <body class=" ">
+    <main class="wrapper">
+      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="https://nsirap.com/">
+      Nicolas Paris
+    </a>
+  </section>
+</nav>
+
+
+      <div class="content">
+        
+  <section class="container post">
+    <article>
+      <header>
+        <div class="post-title">
+          <h1 class="title">Docker Best Practice, Multi-Stage Build</h1>
+        </div>
+        <div class="post-meta">
+          <div class="date">
+            <span class="posted-on">
+              <i class="fas fa-calendar"></i>
+              <time datetime='2021-12-05T10:47:06&#43;01:00'>
+                December 5, 2021
+              </time>
+            </span>
+            <span class="reading-time">
+              <i class="fas fa-clock"></i>
+              3 minutes read
+            </span>
+          </div>
+          
+          
+        </div>
+      </header>
+      <div>
+        <p>This is related to a long post <a href="/posts/038-kubernetes-helm-laravel-php-fpm-nginx-gitlab-the-devops-way/">Kubernetes, Helm, Laravel, PHP-FPM, Nginx, GitLab the DevOps Way</a>, let&rsquo;s go deeper on the <code>Dockerfile</code>. First, this is what we talking about.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Dockerfile" data-lang="Dockerfile"><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> node:lts-alpine as node_build</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">WORKDIR</span><span style="color:#e6db74"> /app</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> package.json ./<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> npm install<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> webpack.mix.js ./<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> resources/ ./resources/<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> public/ ./public/<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># fail du purge sinon</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> mkdir -p /public/css<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> touch /public/css/app.css<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> mkdir -p /public/js<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> touch /public/js/app.js<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> npm run prod<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> composer:2.1.9 as composer_build</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># voir pour le .lock</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> ./composer.json /app/<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> composer install --no-dev --no-autoloader --no-scripts<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> . /app<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> composer install --no-dev --optimize-autoloader<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> php:8.0-fpm-alpine</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> mv <span style="color:#e6db74">&#34;</span>$PHP_INI_DIR<span style="color:#e6db74">/php.ini-production&#34;</span> <span style="color:#e6db74">&#34;</span>$PHP_INI_DIR<span style="color:#e6db74">/php.ini&#34;</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> docker-php-ext-install pdo pdo_mysql<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> devops/docker/php/*.conf /usr/local/etc/php-fpm.d/<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> --chown<span style="color:#f92672">=</span>www-data --from<span style="color:#f92672">=</span>composer_build /app/ /var/www/html/<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> --from<span style="color:#f92672">=</span>node_build /app/public/ /var/www/html/public/<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span>  php artisan view:cache<span style="color:#960050;background-color:#1e0010">
+</span></code></pre></div><p>We need to understand that every step will be cached in a layer if no code as changed, this mean it better to do something in two step if one can be cached. There is two main concepts here</p>
+<ol>
+<li>Build your assets in a separated build (multi-stage), and copy them in the final build.</li>
+<li>Install dependency in a separated step to allow docker caching system to operate.</li>
+</ol>
+<h2 id="multi-stage-build">Multi-stage build</h2>
+<p>In this example, you have a node build stage, and a php (composer) build stage, this allow you to start with basic image that contains already all binary needed for the build and installation of dependency, and throw them away on the final build.</p>
+<p>This mean :</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Dockerfile" data-lang="Dockerfile"><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> node:lts-alpine as node_build</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># do something</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> composer:2.1.9 as composer_build</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># do something</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> php:8.0-fpm-alpine</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># Copy previous builded files for the final docker image</span><span style="color:#960050;background-color:#1e0010">
+</span></code></pre></div><p>The final image will not contains <code>node npm</code> nor <code>php composer</code>, no need to remove them manually, multi-stage does it for you.</p>
+<h2 id="separate-step-for-vendors-and-build">Separate step for vendors and build</h2>
+<p>We all know that <code>npm install</code> and <code>composer install</code> can take some time, you do not want those installation to occur on every build. Let&rsquo;s install dependency only when you add a new dependency, this mean, only when <code>package.json</code> or <code>composer.json</code> has changed.</p>
+<p>If you copy everything at once, every time a change is occur in your code you will install those dependency. frustrating! This mean the following steps</p>
+<ul>
+<li>Copy package.json (or .lock)</li>
+<li>Install dependency</li>
+<li>Copy javascript code</li>
+<li>Build assets</li>
+</ul>
+<p>It could be tricky and adapt on your needs, let&rsquo;s simplify the <code>Dockerfile</code>, this will give you.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Dockerfile" data-lang="Dockerfile"><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> node:lts-alpine as node_build</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">WORKDIR</span><span style="color:#e6db74"> /app</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> package.json ./<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> npm install<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> webpack.mix.js ./<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> resources/ ./resources/<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> public/ ./public/<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> npm run prod<span style="color:#960050;background-color:#1e0010">
+</span></code></pre></div><p>In this case, the <code>npm install</code> is run only when the package.json is changed.<br>
+Let&rsquo;s take a look to the php version.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Dockerfile" data-lang="Dockerfile"><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> composer:2.1.9 as composer_build</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> ./composer.json /app/<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> composer install --no-dev --no-autoloader --no-scripts<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> . /app<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> composer install --no-dev --optimize-autoloader<span style="color:#960050;background-color:#1e0010">
+</span></code></pre></div><p>The idea is the same,</p>
+<ul>
+<li>Copy composer.json (or .lock)</li>
+<li>Install dependency</li>
+<li>Copy php code</li>
+<li>Build assets</li>
+</ul>
+<p>In some cases, a dump-autoload could be enought in the last step. The idea is to not generate the autoloader before to have the copy of php code done. It will failed.</p>
+<h2 id="merge-everything-in-a-minimalist-final-build">Merge everything in a minimalist final build</h2>
+<p>Collect build result, and merge it in a light Docker image. In my case it&rsquo;s php-fpm:alpine but php:alpine is fine.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Dockerfile" data-lang="Dockerfile"><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> php:8.0-fpm-alpine</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> mv <span style="color:#e6db74">&#34;</span>$PHP_INI_DIR<span style="color:#e6db74">/php.ini-production&#34;</span> <span style="color:#e6db74">&#34;</span>$PHP_INI_DIR<span style="color:#e6db74">/php.ini&#34;</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> docker-php-ext-install pdo pdo_mysql<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> devops/docker/php/*.conf /usr/local/etc/php-fpm.d/<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> --chown<span style="color:#f92672">=</span>www-data --from<span style="color:#f92672">=</span>composer_build /app/ /var/www/html/<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> --from<span style="color:#f92672">=</span>node_build /app/public/ /var/www/html/public/<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span>  php artisan view:cache<span style="color:#960050;background-color:#1e0010">
+</span></code></pre></div><p>The idea is to collect builds, configure the container as needed, do some optimisation, and you are done with a lightweight optimized Docker Image.</p>
+
+      </div>
+
+      <footer>
+<div class="sharethis-inline-share-buttons"></div>
+        
+      </footer>
+    </article>
+
+    
+  </section>
+
+      </div>
+
+      <footer class="footer">
+  <section class="container">
+    
+      <p>About sharing code, notes and tips.</p>
+    
+    
+    
+    
+  </section>
+</footer>
+
+    </main>
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-75052939-3', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+  </body>
+
+</html>

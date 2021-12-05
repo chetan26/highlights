@@ -1,0 +1,184 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"> 
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+<title>Bayes classifier for your books</title>
+<link rel="stylesheet" href="https://yurichev.com/style.css">
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]}
+  });
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML-full"></script>
+</head>
+<body>
+<h2>Bayes classifier for your books</h2>
+
+<!-- blog post begin -->
+<p>
+I knew about dbacl -- a simple Bayes classifier, that can classify small texts.
+See <a href="http://dbacl.sourceforge.net/tutorial-1.html">the short tutorial</a>.
+Basically, it was used for filtering spam, but can also categorize your email, like gmail does ('Social', 'Promotions', etc).
+</p>
+
+<p>
+But I wanted to classify my books library, which is in PDF/DJVU/EPUB/MOBI form, but also available in text form, see:
+<a href="https://yurichev.com/news/20210403_search_engine/">my blog post about it</a>.
+</p>
+
+<p>How would I classify it? Maybe I could use some books as references and compare other books with 'referenced books'?</p>
+
+<p>
+But I came up with a more hackish idea -- I can use Wikipedia as a source of categorized texts.
+Why not?
+</p>
+
+<p>
+<a href="https://yurichev.com/tmp/dbacl/get_wikipedia_dumps.sh">Let's get the latest Wikipedia dump.</a>
+</p>
+
+<p>
+I'm passing all the XML dumps through
+<a href="https://yurichev.com/tmp/dbacl/process_wikipedia_dump.py">my tiny Python script.</a>
+It only sorts wikipedia articles by categories.
+So if a text X has '[[Category:Y]]' and '[[Category:Z]]' at the bottom, my script would append this text
+to two files: Y and Z.
+At the end, a file Y would contain text of all articles in this category.
+</p>
+
+<p>
+The resulting text files are huge.
+If you want to repeat my steps, you can get them:
+<a href="https://yurichev.com/tmp/dbacl/enwiki_categories_texts.7z">(beware - 10GB)</a>.
+</p>
+
+<p>
+<a href="https://yurichev.com/tmp/dbacl/run_dbacl_prepare.sh">Then I extracted all the features from each category using dbacl.</a>
+</p>
+
+<p>
+Again, if you want to get all the files processed by dbacl, here are:
+<a href="https://yurichev.com/tmp/dbacl/dbacl_processed.7z">(1GB)</a>.
+</p>
+
+<p>
+Now the problem.
+dbacl from the default Ubuntu 20.* package supports only 256 categories, but I wanted much more.
+Sadly, dbacl is not maintained actively, so it wouldn't compile, I'm getting an error
+<a href="https://bugs.gentoo.org/689500">like that</a>.
+</p>
+
+<p>
+So it's time to hack it a little.
+In src/config.h I removed "#define HAVE_MBRTOWC 1".
+I don't need Unicode anyway.
+With a bit tinkering, I managed to extend max categories to 10000:
+<a href="https://yurichev.com/tmp/dbacl/dbacl-1.14.1.patch">patch</a>.
+But no more -- some global arrays would be bigger than compiler's limits otherwise...
+So I removed many smaller Wikipedia categories, and only ~10k are left, that have largest texts.
+(In other words, only ~10k most popular categories are left.)
+</p>
+
+<p>
+<a href="https://yurichev.com/tmp/dbacl/dbacl-1.14.1-patched-and-compiled.tar.bz2">Patched and compiled version of dbacl for Linux.</a>
+</p>
+
+<p>
+OK, now I can pass all my library through.
+<a href="https://yurichev.com/tmp/dbacl/run_dbacl_check.sh">This script</a>
+prepares a command line for dbacl by enumerating all categories.
+</p>
+
+<p>
+A command line can be huge, up to 0.5MB (all ~10k categories are listed here)!
+<a href="https://yurichev.com/tmp/dbacl/example_command_line_for_dbacl.sh">Example.</a>
+</p>
+
+<p>
+<a href="https://yurichev.com/tmp/dbacl/run_dbacl_for_book.sh">This script run dbacl with this huge command line for a book.</a>
+</p>
+
+<p>
+<a href="https://yurichev.com/tmp/dbacl/run_dbacl_for_all_books.sh">This script run it for all books in my collection, sorting them into categories.</a>
+</p>
+
+<p>
+Unfortunately, dbacl is painfully slow (keep in mind ~10k categories).
+I waited almost a week to get my library processed.
+4 CPU cores has been busy all the time and 4 dbacl instances used ~10GB of RAM.
+<p>
+
+<p>
+<a href="https://yurichev.com/tmp/dbacl/my-library.txt">But the results are fun!</a>
+</p>
+
+<p>
+All the system is far from perfect, but it performs surprisingly well!
+Math books went to 'Articles_containing_proofs', many programming books went to 'Articles_with_example_C_code', 'Articles_with_example_code', etc.
+</p>
+
+<p>
+One fun thing is that many fiction books went to a 'Wikipedia_Reference_Desk_archive' category.
+What is this?
+Ah, these are Wikipedia pages with many chats and dialogues:
+<a href="https://en.wikipedia.org/wiki/Wikipedia:Reference_desk">"The Wikipedia reference desk works like a library reference desk. Ask a question here and Wikipedia volunteers will try to answer it."</a>
+</p>
+
+<p>
+Probably, this category is better to be removed.
+</p>
+
+<p>
+<a href="https://yurichev.com/tmp/dbacl/gutenberg.txt">Then I processed many books from the Gutenberg library.</a>
+Far from perfect, but not bad either!
+</p>
+
+<p>
+In my opinion, though it's very slow, it's practically usable.
+</p>
+
+<p>
+Further work: a set of categories may be much better, prepared manually.
+Also, a script can print several categories for each text.
+</p>
+
+<p>
+P.S.
+Also fun story:
+<a href="http://dbacl.sourceforge.net/spam_chess-1.html">"Can a Bayesian spam filter play chess?"</a>
+</p>
+<!-- blog post end -->
+
+<p><img src="https://yurichev.com/tmp/dot.png?body_20210413_dbacl"></p>
+
+<!-- blog footer begin -->
+<hr>
+<p>
+<a href="https://yurichev.com/news/">List of my other blog posts.</a>
+</p>
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+    /*
+    var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://yurichev.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<!-- blog footer end -->
+
+</body>
+</html>
+

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Extensibility over configuration</title>
+<meta name="description" content="Extensibility over configuration" />
+<script type="text/javascript" src = '/js/index.min.2f501cfacd865fe39483cc2842472bc2800849d6ef410e2bd58e33befa0875ee.js'></script>
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BEGTK6NDLT"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-BEGTK6NDLT');
+</script>
+
+
+
+  
+  <link rel="stylesheet" href="https://www.gertgoeman.com/css/theme.min.8a9a0d5b654b778b8cbdeb42e9f034e0d1d9cbbf47262e485b22f809064d53dc.css" integrity="sha256-ipoNW2VLd4uMvetC6fA04NHZy79HJi5IWyL4CQZNU9w=">
+  
+
+<link rel="stylesheet" href="https://www.gertgoeman.com/css/styles.min.815e5186ed1fa7e026dc33011fe55066e02884c47ce45fe917066e8b6edf17ab.css" integrity="sha256-gV5Rhu0fp+Am3DMBH+VQZuAohMR85F/pFwZui27fF6s=">
+
+
+
+    <body>
+        <header class="
+    bg-white 
+    px-4 
+    pb-2 
+    md:pb-5 
+    mt-5 
+    box-shadow
+">
+
+    <nav class="pt-4">
+        <div class="hidden md:block" id="menu">
+            <ul class="
+                md:flex 
+                md:items-center
+                md:justify-center
+            ">
+                
+                
+
+                <li class="
+                    text-gray-500 
+                    pt-1 
+                    text-lg 
+                    hover:underline 
+                     text-gray-900 
+                    md:mx-3
+                ">
+                    <a class="" href=" /">
+                    Blog
+                    </a>
+                </li>
+                
+
+                <li class="
+                    text-gray-500 
+                    pt-1 
+                    text-lg 
+                    hover:underline 
+                     
+                    md:mx-3
+                ">
+                    <a class="" href=" /about/">
+                    About
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </nav>
+</header>
+
+
+        <div>
+            <div class="
+                container 
+                max-w-screen-md 
+                mx-auto 
+                px-4
+            ">
+                <div class="lg:mt-10 mt-4">
+                    
+    <time class="
+        uppercase 
+        font-bold 
+        text-xs 
+        text-gray-700
+        mb-3
+        block
+    ">Wednesday, Nov 24, 2021</time>
+    <div class="content">
+        
+
+
+
+<h1 class="text-3xl mb-6" id="extensibility-over-configuration">Extensibility over configuration <a href="#extensibility-over-configuration"></a></h1>
+<p>A couple of years ago, at a previous job, I worked on an application that targeted the enterprise market. Typical for enterprise applications is the requirement to be able to customize almost every aspect to the liking of the customer.</p>
+<p>At a certain point, there was a requirement to implement some kind of lightweight CMS-like functionality. People could combine multiple pre-defined components into pages. They could do this through an admin interface, exposed to power-users of the application. Given the flexible nature of the pages, it seemed like a good idea to store the configuration of each page as a JSON document in the database.</p>
+<p>As time went on, the requirements of what these pages should be able to do became increasingly complex. Components needed to be shown conditionally, data needed to be passed on between components, associated data needed to be rendered&hellip; The JSON schema needed to be extended to support this kind of functionality.</p>
+<p>The admin interface, on the other hand, needed to be kept simple enough for non-technical users to use. We were on a tight schedule, and there was no time to come up with an appropriate way of extending the admin interface to support the newly added, more complex functionality. Hence, we decided to leave the admin interface for what it was for a while and split the pages into two categories: editable in the UI and not editable in the UI. The second category of pages could only be created by editing the JSON directly.</p>
+<p>It quickly became clear that as the application grew more complex, almost no page could be edited in the admin interface anymore. Attempts were made to update the admin interface to make it compatible with the vastly more complicated schema, but none of these attempts were successful.</p>
+<p>As so often is the case with enterprise applications, the actual customization and configuration of the application was done by third party teams. Since the admin interface couldn&rsquo;t be used anymore, it was up to them to create and configure new pages. Needless to say, they weren&rsquo;t very efficient at it. Building or editing a page was pretty much trial and error. There were so many options and switches to turn on or off, so many ways of combining all kinds of abstract components that nobody could see the forest for the trees anymore.</p>
+
+
+
+
+<h2 class="text-2xl mt-6 mb-6" id="configuration-files">Configuration files <a href="#configuration-files"></a></h2>
+<p>I&rsquo;ve encountered similar situations on various occasions during my career. People try to make their system so flexible that they end up making it unmaintainable. While doing some research on the topic, I ran into a Hackernews comment that mentioned <a href="https://en.wikipedia.org/wiki/Greenspun%27s_tenth_rule" target="_blank">Greenspun&#39;s tenth rule</a>:</p>
+<div class="mb-6 border-l-8 p-4">
+Any sufficiently complicated C or Fortran program contains an ad hoc, informally-specified, bug-ridden, slow implementation of half of Common Lisp.
+</div>
+<p>More often than not, this involves some kind of configuration file (stored on the file system or in the database). It doesn&rsquo;t matter which format they use. Whether it&rsquo;s JSON, XML, YAML, TOML, S-Expressions, &hellip; (I can keep going for a while) doesn&rsquo;t make a difference. What matters is that they put functionality in configuration files that doesn&rsquo;t belong in configuration files.<br>
+If you allow people to put conditional logic, loops, variables&hellip; in your configuration schema, you&rsquo;ll end up creating a new programming language with a very awkward syntax. Nobody&rsquo;s going to be efficient programming in JSON/XML/YAML/&hellip;</p>
+<p>Let&rsquo;s use our lightweight CMS as an example and see if we can find a better solution.</p>
+<p>The problem in this case isn&rsquo;t the fact that we&rsquo;re storing the composition of our pages as JSON in the database. There&rsquo;s a good reason to do so: the configuration of the pages is flexible. The problem is that we&rsquo;re putting a lot more than only the composition of the page in our configuration. We&rsquo;re putting actual logic in there as well!</p>
+
+
+
+
+<h2 class="text-2xl mt-6 mb-6" id="extensions">Extensions <a href="#extensions"></a></h2>
+<p>Since we&rsquo;re already leaving it up to developers to configure pages, we might as well let them do it in an actual programming language. Instead of adding logic to the config files, why don&rsquo;t we simply let them create custom components? These components can then be used in the configuration file, just like any other available component. This allows the configuration files to be simple compositions of elementary components, which can easily be edited in the admin UI while allowing developers to add more complicated logic outside of the config file.</p>
+<p>This seems like an obvious solution, but keep in mind that something configurable will often be configured by a third party (as it was in our case) that doesn&rsquo;t have access to the source code. Some kind of extensibility system needs to be created. There needs to be an API or SDK to implement the extensions, a way of installing the extensions, and a way of distributing the API or SDK.</p>
+<p>There are various ways of achieving this, depending on the technologies used and whether you&rsquo;re working on a frontend or backend application.</p>
+
+
+
+
+<h2 class="text-2xl mt-6 mb-6" id="web-application-with-shared-components">Web application with shared components <a href="#web-application-with-shared-components"></a></h2>
+<figure class="mt-10 mb-10 flex justify-center"><img src="images/uicomponents.svg"/>
+</figure>
+
+<p>Web applications are usually written using some kind of JavaScript framework such as <a href="https://reactjs.org/" target="_blank">React</a>, <a href="https://vuejs.org/" target="_blank">Vue</a>, <a href="https://angular.io/" target="_blank">Angular</a>&hellip; (whatever the flavor of the month is). One thing these frameworks have in common is a way to define reusable components. Since these components are defined in code, developers can easily make them look and behave according to whatever wildly complicated requirements the customer comes up with.</p>
+<p>These properties make them ideal building blocks for an extensibility framework. One can define a set of elementary components, a bunch of reusable components that developers can compose to build a more high-level component suitable for their use case. Common operations, such as accessing an HTTP API or calculating derived values, can be provided to extension developers as functions.</p>
+<p>Getting all dependencies wired up correctly and getting the extension to run inside the application is a bit more complicated. Let&rsquo;s have a look at how we could achieve this in the React ecosystem.</p>
+
+
+
+
+<h3 class="text-xl mt-6 mb-6" id="loading-the-extensions-dynamically">Loading the extensions dynamically <a href="#loading-the-extensions-dynamically"></a></h3>
+<p>The application developers can distribute the set of common components as an <a href="https://www.npmjs.com/" target="_blank">npm package</a>. Extension developers can install the npm package into a <a href="https://nodejs.org/" target="_blank">Node</a> application and use it to build their own custom components. The custom components can be built into a bundle, which can be hosted on a URL available to the application. The application, in turn, imports the bundle from the URL and renders the components.</p>
+<p>It turns out that this is actually quite complicated to do! Fortunately, <a href="https://github.com/Paciolan/remote-component" target="_blank">this library</a> seems to do exactly this. The great thing about this library is that it allows one to split off shared dependencies. This allows the bundle size of the extension to remain small since most common functionality is already included in the application.</p>
+
+
+
+
+<h3 class="text-xl mt-6 mb-6" id="bundling-the-extension">Bundling the extension <a href="#bundling-the-extension"></a></h3>
+<p>Another, easier approach is to distribute the whole application&rsquo;s JavaScript bundle as an <a href="https://www.npmjs.com/" target="_blank">npm package</a>. Extension developers can install the bundle in their <a href="https://nodejs.org/" target="_blank">Node</a> project and add their own custom components to it. They can then re-bundle the whole thing (application and custom components) and upload it to the application. The application can now use the new bundle instead of the original one.</p>
+<p>This approach is simpler since it doesn’t require using an external library load components dynamically. There’s also no need to track shared dependencies. The downside is that to add multiple extensions, one has to re-bundle the application multiple times.</p>
+
+
+
+
+<h2 class="text-2xl mt-6 mb-6" id="backend">Backend <a href="#backend"></a></h2>
+<p>I&rsquo;m using the word backend to describe many types of applications: web APIs, background workers, scheduled tasks, message bus consumers&hellip; These types of applications have in common that they&rsquo;re not interacting with the end-user directly.</p>
+<p>There are various ways to implement extensibility in the backend, depending on the programming language (strongly typed vs weakly typed) and the choice of messaging mechanism (HTTP, sockets, message bus, database).</p>
+<p>Just like in the JavaScript ecosystem, most other languages support a kind of packaging system which allows developers to distribute a piece of code. The <a href="https://dotnet.microsoft.com/" target="_blank">.NET</a> ecosystem has <a href="https://www.nuget.org/" target="_blank">NuGet</a> packages, <a href="https://www.rust-lang.org/" target="_blank">Rust</a> has <a href="https://crates.io/" target="_blank">crates</a>, <a href="https://go.dev/" target="_blank">Go</a> even lets you import <a href="https://go.dev/doc/code#ImportingRemote" target="_blank">git repositories as packages</a>. Application developers can easily create a package containing the building blocks that extension developers can use to implement an extension.</p>
+
+
+
+
+<h3 class="text-xl mt-6 mb-6" id="interfaces-and-dependency-injection">Interfaces and dependency injection <a href="#interfaces-and-dependency-injection"></a></h3>
+<figure class="mt-10 mb-10 flex justify-center"><img src="images/di.svg"/>
+</figure>
+
+<p><a href="https://en.wikipedia.org/wiki/Strong_and_weak_typing" target="_blank">Strongly typed</a> languages often support the concept of <a href="https://en.wikipedia.org/wiki/Interface-based_programming" target="_blank">interfaces</a>. An interface basically defines a contract between a caller and a callee. The caller can invoke a callee, as long as that callee satisfies the contract defined by the interface (implements the interface).</p>
+<p>Another widely used technique is <a href="https://en.wikipedia.org/wiki/Dependency_injection" target="_blank">dependency injection</a>. Dependency injection allows application developers to write code that depends on an interface, without explicitly defining which implementation of that interface to use. They have a dependency on the abstraction (the interface) instead of on the actual implementation (the code implementing the interface). The concrete dependency is injected into the code by the dependency injection framework.</p>
+<p>What the interfaces will look like depends on the use case. There are roughly two approaches one can take:</p>
+<ul>
+<li>
+<p>The interface defines methods such as &ldquo;OnInvoiceCreated(event)&rdquo;. Implementations of the interface can respond to events that occurred in the application, but they can&rsquo;t influence the logic executed by the application.</p>
+</li>
+<li>
+<p>The interface defines a method that is called during the execution of the business logic. Implementations of the interface can influence the logic executed by the application. A good example would be a custom validator, which can prevent invoices from being saved into the database.</p>
+</li>
+</ul>
+<p>How to install the extensions back into the original application depends on the language and technologies used. What they do have in common is that the dependency injection framework will need to be configured to supply the extension&rsquo;s implementation of the interfaces to the rest of the application.</p>
+<p>In <a href="https://dotnet.microsoft.com/" target="_blank">.NET</a> and <a href="https://www.java.com" target="_blank">Java</a>, <a href="https://en.wikipedia.org/wiki/Reflective_programming" target="_blank">reflection</a> can be used to dynamically detect and initialize new components. Golang has the concept of plugin packages. I&rsquo;m sure other languages have similar concepts.</p>
+<p><a href="https://en.wikipedia.org/wiki/Strong_and_weak_typing" target="_blank">Weakly typed languages</a> don&rsquo;t necessarily support the concept of interface. This doesn&rsquo;t mean the same approach can&rsquo;t be used. <a href="https://www.python.org/" target="_blank">Python</a>, for example, has the concept of classes that support multiple inheritance. One can treat a class as an interface. Given the nature of weakly typed languages, one could even argue that there&rsquo;s no need for the concept of an interface. The caller can simply check whether a certain method exists on a target object. Only if that method exists, they can call it.</p>
+<p>Dependency injection doesn&rsquo;t seem to be as common with weakly typed languages either. Those languages often provide alternative ways to achieve similar results. For python, for example, one can dynamically discover and import other modules from a directory on the filesystem. <a href="https://julienharbulot.com/python-dynamical-import.html" target="_blank">This blog post</a> describes how this can be achieved.</p>
+
+
+
+
+<h3 class="text-xl mt-6 mb-6" id="events-on-a-message-bus">Events on a message bus <a href="#events-on-a-message-bus"></a></h3>
+<figure class="mt-10 mb-10 flex justify-center"><img src="images/msgbus.svg"/>
+</figure>
+
+<p>Nowadays a lot of companies are transforming their IT infrastructure into a microservices architecture. Whether or not it&rsquo;s a good idea is left open for debate, but what&rsquo;s typical for microservices is that they use a message bus in one way or another. There are plenty of message buses out there in the wild: <a href="https://kafka.apache.org/" target="_blank">Kafka</a>, <a href="https://www.rabbitmq.com/" target="_blank">RabbitMq</a>, <a href="https://azure.microsoft.com/services/service-bus/?cdn=disable" target="_blank">Azure Service Bus</a>, just to name a few&hellip;</p>
+<p>A common pattern these types of applications use is to publish events on the message bus. Other applications can subscribe to these events and respond to them by executing a piece of code.</p>
+<p>This approach is similar to &ldquo;event responder&rdquo; interfaces, but it&rsquo;s less obtrusive. Extension developers can host and deploy their extensions however they want. No need to copy any files to the application. The only requirement is that the extension can access the message bus.</p>
+<p>An obvious downside of this approach is that the extensions can&rsquo;t influence the logic executed by the application. One could use the saga pattern and compensating transactions to overcome these issues, but that&rsquo;s outside the scope of this article.</p>
+
+
+
+
+<h2 class="text-2xl mt-6 mb-6" id="conclusion">Conclusion <a href="#conclusion"></a></h2>
+<p>I&rsquo;m certainly not against configuration files. We can&rsquo;t simply hard-code everything and expect users to develop extensions for each setting they need to customize. Things like URLs, folders, timeouts, &hellip; should still be put in configuration files. I believe configuration files should be kept as simple as possible. This will not only benefit the maintainability of the application and the sanity of whoever needs to work with them.</p>
+
+    </div>
+
+                </div>
+            </div>
+
+            <footer class="
+    box-shadow-bottom
+">
+<div class="
+flex 
+items-center
+justify-center
+pt-2
+pb-2
+">
+    <a class="text-gray-700" href="/posts/index.xml"><i class="fas fa-rss mr-1"></i><span class="underline">rss</span></a>
+    <a class="text-gray-700 ml-5" href="https://twitter.com/realgertgoeman" target="_blank"><i class="fab fa-twitter mr-1"></i><span class="underline">twitter</span></a>
+</div>
+</footer>
+        </div>
+
+        <script src="/js/responsive-menu.js"></script>
+    </body>
+</html>

@@ -15,7 +15,8 @@ Return an array of content objects
 		"type": "html",
 		"imgUrl":"/highlights/content1/politics.jpg",
 		"duration": "10m",
-		"highlights": 23
+		"highlights": 23,
+		"launch":"path/to/file"
 	},
 	{
 		"id":"content2",
@@ -23,7 +24,8 @@ Return an array of content objects
 		"type": "pdf",
 		"imgUrl":"/highlights/content2/soccer.png",
 		"duration": "30m",
-		"highlights": 0
+		"highlights": 0,
+		"launch":"path/to/file"
 	},
 	{
 		"id":"content3",
@@ -31,7 +33,8 @@ Return an array of content objects
 		"type": "video",
 		"imgUrl":"/highlights/assets/placeholder.jpg",
 		"duration": "1h",
-		"highlights": 4
+		"highlights": 4,
+		"launch":"path/to/file"
 	}
 ]
 ```
@@ -52,7 +55,8 @@ Return an array of content objects
 		"type": "html",
 		"imgUrl":"/highlights/content1/politics.jpg",
 		"duration": "10m",
-		"highlights": 23
+		"highlights": 23,
+		"launch":"path/to/file"
 	},
 	{
 		"id":"content2",
@@ -60,7 +64,8 @@ Return an array of content objects
 		"type": "pdf",
 		"imgUrl":"/highlights/content2/soccer.png",
 		"duration": "30m",
-		"highlights": 0
+		"highlights": 0,
+		"launch":"path/to/file"
 	},
 	{
 		"id":"content3",
@@ -68,7 +73,8 @@ Return an array of content objects
 		"type": "video",
 		"imgUrl":"/highlights/assets/placeholder.jpg",
 		"duration": "1h",
-		"highlights": 4
+		"highlights": 4,
+		"launch":"path/to/file"
 	}
 ]
 ```
@@ -196,8 +202,16 @@ Return nothing. Request below.
 		}
 	}
 ```
+## Content Page: Delete a highlight 
 
-## Personalization Page: Show all my highlights
+DELETE @ /highlights/me/{highlight-id}
+
+Return nothing. UI should get refreshed immediately.
+
+----
+## APIs for the future
+
+### Personalization Page: Show all my highlights
 
 GET @ /highlights/me
 
@@ -255,20 +269,14 @@ Return an array of highlight objects
 ]
 ```
 
-## Personalization Page: Remove a highlight
-
-DELETE @ /highlights/me/{highlight-id}
-
-Return nothing
-
-## Personalization Page: Get my stylesheet for highlights
+### Personalization Page: Get my stylesheet for highlights
 
 GET @ /highlights/me/style
 
 Return a stylesheet generated dynamically for this user
 
 
-## Personalization Page: Get my UI config for highlight
+### Personalization Page: Get my UI config for highlight
 
 GET @ /highlights/me/config
 
@@ -289,7 +297,7 @@ Return a highlight config object
 	}
 ```
 
-## Personalization Page: Save my UI config for highlight
+### Personalization Page: Save my UI config for highlight
 
 PUT @ /highlights/me/config
 
