@@ -3,3 +3,8 @@ Use Mongo DB
 
 Primary use-case is html and video.
 If we are unable to get to PDF, we will skip it.
+
+TODO:
+
+What happens in case of overlapping highlights ?
+How can I undo a highlight ?

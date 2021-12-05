@@ -1,0 +1,503 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+        <html lang="en">
+        <head><title>Strategies for offline PGP key storage [LWN.net]</title>
+        <meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@lwnnet" />
+<meta name="twitter:title" content="Strategies for offline PGP key storage" />
+<meta name="twitter:description" content="While the adoption of OpenPGP
+ by the general population is marginal at
+best, it is a critical component for the security community and
+particularly for Linux distributions. For example, every package
+uploaded into Debian is verified by the central repository using the
+maintainer's OpenPGP keys and the
+repository itself is, in turn, signed 
+using a separate key. If upstream packages also use such signatures, this
+creates 
+a complete trust path from the original upstream developer to
+users.
+Beyond that, pull requests for the Linux kernel are verified using
+ signatures as well.
+Therefore, the stakes are high: a compromise of the release key, or
+even of a single maintainer's key, could enable devastating
+attacks against many machines.
+" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+        <link rel="icon" href="https://static.lwn.net/images/favicon.png"
+              type="image/png">
+        <link rel="alternate" type="application/rss+xml" title="LWN.net headlines" href="https://lwn.net/headlines/newrss">
+<link rel="alternate" type="application/rss+xml" title="Comments posted to this article" href="https://lwn.net/headlines/734767/">
+        <link rel="stylesheet" href="/CSS/lwn">
+<link rel="stylesheet" href="/CSS/nosub">
+<link rel="stylesheet" href="/CSS/pure-min">
+           <!--[if lte IE 8]>
+             <link rel="stylesheet" href="/CSS/grids-responsive-old-ie-min">
+           <![endif]-->
+           <!--[if gt IE 8]><!-->
+             <link rel="stylesheet" href="/CSS/grids-responsive-min">
+           <!--<![endif]-->
+           <link rel="stylesheet" href="/CSS/pure-lwn">
+           
+        
+<script type="text/javascript">var p="http",d="static";if(document.location.protocol=="https:"){p+="s";d="engine";}var z=document.createElement("script");z.type="text/javascript";z.async=true;z.src=p+"://"+d+".adzerk.net/ados.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(z,s);</script>
+<script type="text/javascript">
+var ados_keywords = ados_keywords || [];
+if( location.protocol=='https:' ) {
+        ados_keywords.push('T:SSL');
+} else {
+        ados_keywords.push('T:HTTP');
+}
+
+var ados = ados || {};
+ados.run = ados.run || [];
+ados.run.push(function() {
+
+ados_add_placement(4669, 20979, "azk13321_leaderboard", 4).setZone(16026);
+
+ados_add_placement(4669, 20979, "azk93271_right_zone", [5,10,6]).setZone(16027);
+
+ados_add_placement(4669, 20979, "azk31017_tracking", 20).setZone(20995);
+
+
+
+ados_setKeywords(ados_keywords.join(', ')); 
+ados_load();
+});</script>
+
+        </head>
+        <body bgcolor="#ffffff" link="Blue" VLINK="Green" alink="Green">
+        <a name="t"></a>
+<div id="menu"><a href="/"><img src="https://static.lwn.net/images/logo/barepenguin-70.png" class="logo"
+                 border="0" alt="LWN.net Logo">
+           <font class="logo">LWN<br>.net</font>
+           <font class="logobl">News from the source</font></a>
+           <a href="/"><img src="https://static.lwn.net/images/lcorner-ss.png" class="sslogo"
+                 border="0" alt="LWN"></a><div class="navmenu-container">
+</div>
+</div> <!-- menu -->
+<div class="pure-g not-handset" style="margin-left: 10.5em">
+           <div class="not-print">
+             <div id="azk13321_leaderboard"></div>
+           </div>
+           </div>
+        <div class="topnav-container">
+
+               </div><div class="pure-grid maincolumn">
+<div class="lwn-u-1 pure-u-md-19-24">
+<div class="PageHeadline">
+<h1>Strategies for offline PGP key storage</h1>
+</div>
+<div class="ArticleText">
+<center>
+           <table class="Form" width="60%">
+           <tr><td><b>This article brought to you by LWN subscribers</b><p>Subscribers to LWN.net made this article &mdash; and everything that
+       surrounds it &mdash; possible.  If you appreciate our content, please
+       <a href="/subscribe/">buy a subscription</a> and make the next
+       set of articles possible.</td></tr>
+           </table>
+           </center>
+           <p>
+           <div class="GAByline">
+           <p>October 2, 2017</p>
+           <p>This article was contributed by Antoine Beaupré</p>
+           </div>
+<p>While the adoption of <a href="http://openpgp.org/">OpenPGP</a>
+ by the general population is marginal at
+best, it is a critical component for the security community and
+particularly for Linux distributions. For example, every package
+uploaded into Debian is verified by the central repository using the
+maintainer's OpenPGP keys and the
+repository itself is, in turn, signed 
+using a separate key. If upstream packages also use such signatures, this
+creates 
+a complete trust path from the original upstream developer to
+users.
+Beyond that, pull requests for the Linux kernel are verified using
+ signatures as well.
+Therefore, the stakes are high: a compromise of the release key, or
+even of a single maintainer's key, could enable devastating
+attacks against many machines.</p>
+
+<p>That has led the Debian community to develop a good grasp of
+best practices for cryptographic signatures (which are typically handled using <a
+href="http://gnupg.org/">GNU Privacy Guard</a>, also known as GnuPG or
+GPG). For example, weak (less than 2048 bits) and <a
+href="/Articles/588266/">vulnerable</a> PGPv3  
+keys were <a
+href="https://lists.debian.org/20150101191039.GB5209@earth.li">removed</a>
+from the keyring in 2015, and there is a strong
+culture of cross-signing keys between Debian members at in-person
+meetings. Yet even Debian developers (DDs) do not seem to have established
+practices on how to actually store critical private key material, as
+we can see in this <a
+href="https://lists.debian.org/debian-project/2017/08/msg00011.html">discussion</a>
+on the debian-project mailing list.  That email
+boiled down to a simple request: can I have a "key dongles for
+dummies" tutorial? Key dongles, or keycards as we'll call them here,
+are small devices that allow users to store keys on an offline
+device and provide one possible solution for protecting private key
+material. In this article, I hope to use my experience in this domain to 
+clarify the issue of how to store those precious private keys that, if
+compromised, could
+enable arbitrary code execution on millions of machines all over the
+world.</p>
+
+<h4>Why store keys offline?</h4>
+
+<p>Before we go into details about storing keys offline, it may be
+useful to do a small reminder of how the <a href="https://tools.ietf.org/html/rfc4880">OpenPGP standard</a> works.
+OpenPGP keys are made of a main public/private key pair, the
+certification key, used to sign user identifiers and subkeys. My
+public key, shown below, has the usual main certification/signature key (marked
+<code>SC</code>) but also an encryption subkey (marked <code>E</code>), a separate signature
+key (<code>S</code>), and two authentication keys (marked <code>A</code>)
+which I use as RSA 
+keys to log into servers using SSH, thanks to the <a
+href="http://monkeysphere.info/">Monkeysphere</a> 
+project.</p>
+
+<pre>
+    pub   rsa4096/792152527B75921E 2009-05-29 [SC] [expires: 2018-04-19]
+	  8DC901CE64146C048AD50FBB792152527B75921E
+    uid                 [ultimate] Antoine Beaupré &lt;anarcat@anarc.at&gt;
+    uid                 [ultimate] Antoine Beaupré &lt;anarcat@koumbit.org&gt;
+    uid                 [ultimate] Antoine Beaupré &lt;anarcat@orangeseeds.org&gt;
+    uid                 [ultimate] Antoine Beaupré &lt;anarcat@debian.org&gt;
+    sub   rsa2048/B7F648FED2DF2587 2012-07-18 [A]
+    sub   rsa2048/604E4B3EEE02855A 2012-07-20 [A]
+    sub   rsa4096/A51D5B109C5A5581 2009-05-29 [E]
+    sub   rsa2048/3EA1DDDDB261D97B 2017-08-23 [S]
+</pre>
+
+<p>All the subkeys (<code>sub</code>) and identities (<code>uid</code>) are
+bound by the main 
+certification key using cryptographic self-signatures. So while an
+attacker stealing a private subkey can spoof signatures in my name or
+authenticate to other servers, that key can always be revoked by the
+main certification key. But if the certification key gets stolen, all
+bets are off: the attacker can create or revoke identities or subkeys
+as they wish. In a catastrophic scenario, an attacker could even steal
+the key and remove your copies, taking complete control of the key,
+without any possibility of recovery. Incidentally, this is why it is
+so important to generate a revocation certificate and store it
+offline.</p>
+
+<p>So by moving the certification key offline, we reduce the attack
+surface on the OpenPGP trust chain: day-to-day keys (e.g. email
+encryption or signature) can stay online but if they get stolen, the
+certification key can revoke those keys without having to revoke the
+main certification key as well. Note that a stolen encryption key is a
+different problem: even if we revoke the encryption subkey, this will
+only affect future encrypted messages. Previous messages <em>will</em> be
+readable by the attacker with the stolen subkey even if that subkey
+gets revoked, so the benefits of revoking encryption certificates are
+more limited.</p>
+
+<h4>Common strategies for offline key storage</h4>
+
+<p>Considering the security tradeoffs, some propose storing those
+critical keys offline to reduce those threats. But where exactly? In
+an attempt to answer that question, Jonathan McDowell, a member of
+the <a href="https://wiki.debian.org/Teams/KeyringMaint">Debian keyring maintenance team</a>, said that there are <a href="https://lists.debian.org/debian-project/2017/08/msg00054.html">three
+options</a>: use  an external LUKS-encrypted
+volume, an air-gapped system, or a keycard.</p>
+
+<p>Full-disk encryption like LUKS adds an extra layer of security by hiding
+the content of the key from an attacker. Even though private keyrings are
+usually protected by a passphrase, they are easily
+identifiable as a keyring. But when a volume is fully encrypted, it's not
+immediately 
+obvious to an attacker there is private key material on the device. <a
+href="https://lists.debian.org/debian-project/2017/08/msg00148.html">According</a>
+to Sean Whitton, another advantage of LUKS over plain GnuPG keyring
+encryption is that you can pass the <code>--iter-time</code> argument when
+creating a LUKS partition to increase key-derivation delay, which makes
+brute-forcing much harder.
+Indeed, GnuPG&nbsp;2.x <a
+href="https://dev.gnupg.org/T3400">doesn't have</a> a run-time option to
+configure the 
+key-derivation algorithm, although a <a
+href="https://dev.gnupg.org/T3399">patch</a> was introduced recently to
+make 
+the delay configurable at compile
+time in <tt>gpg-agent</tt>, which is now responsible for all secret key
+operations.
+
+<p>
+The downside of external volumes is complexity: GnuPG
+makes it difficult to extract secrets out of its keyring, which
+makes the first setup tricky and error-prone.
+This is easier in the 2.x series thanks to the new storage system and the
+associated <tt>keygrip</tt> files, but it still requires arcane knowledge
+of GPG internals.  
+It is also inconvenient to
+use secret keys stored outside your main keyring when you actually <i>do</i>
+need to use them, as GPG doesn't know where to find those keys anymore.</p>
+
+<p>Another option is to set up a separate air-gapped system to perform
+certification operations. An example is the <a
+href="https://wiki.debian.org/OpenPGP/CleanRoomLiveEnvironment">PGP
+clean room</a> project, which is a live system based on Debian and designed
+by DD Daniel Pocock to operate an OpenPGP and X.509
+certificate authority using commodity hardware. The basic principle is to
+store the secrets on a different machine that is never connected to the network
+and, therefore, not exposed to attacks, at least in theory. I have
+personally discarded that approach because I feel air-gapped systems
+provide a false sense of security: data eventually does need to come in and
+out of the system, somehow, even if only to propagate signatures out of the
+system, which exposes the system to attacks.
+
+<p>
+System updates are similarly
+problematic: to keep the system secure, timely security updates need to be
+deployed to the air-gapped system. A common use pattern is to share data
+through USB keys, which introduce a vulnerability where attacks like <a
+href="/Articles/608503/">BadUSB</a> can infect the air-gapped system. From
+there, there is a multitude of exotic ways of exfiltrating the data using
+<a
+href="https://threatpost.com/blinking-router-leds-leak-data-from-air-gapped-networks/126199/">LEDs</a>,
+<a
+href="http://thehackernews.com/2017/09/airgap-network-malware-hacking.html">infrared
+cameras</a>, or the good old <a
+href="https://www.wired.com/2015/07/researchers-hack-air-gapped-computer-simple-cell-phone/">TEMPEST</a>
+attack. I therefore concluded the complexity tradeoffs of an air-gapped
+system are not worth it. Furthermore, the workflow for air-gapped systems
+is complex: even though PGP clean room went a long way, it's still lacking
+even simple scripts that allow signing or transferring keys, which is a problem shared by the external LUKS storage approach.</p>
+
+<h4>Keycard advantages</h4>
+
+<p>The approach I have chosen is to use a cryptographic keycard: an
+external device, usually connected through the USB port, that stores
+the private key material and performs critical cryptographic
+operations on the behalf of the host. For example, the <a href="http://www.gniibe.org/FST-01/fst-01.html">FST-01 keycard</a>
+can perform RSA and ECC public-key decryption without ever exposing
+the private key material to the host. In effect, a keycard is a
+miniature computer that performs restricted computations for another
+host. Keycards usually support multiple "slots" to store subkeys. The
+OpenPGP standard specifies there are three subkeys available by default:
+for signature, authentication, and encryption. Finally, keycards can
+have an actual physical keypad to enter passwords so a potential
+keylogger cannot capture them, although the keycards I have access to
+do not feature such a keypad.</p>
+
+<p>We could easily draw a parallel between keycards and an air-gapped
+system; in effect, a keycard is a miniaturized air-gapped computer and
+suffers from similar problems.  An attacker can intercept data on the host
+system and attack the device in the same way, if not more easily,
+because a keycard is actually "online" (i.e. clearly not air-gapped) when
+connected. The advantage 
+over a fully-fledged air-gapped computer, however, is that the keycard
+implements 
+only a restricted set of operations. So it is easier to create an open
+hardware and software design that is audited and verified,
+which is much harder to accomplish for a general-purpose computer.</p>
+
+<p>Like air-gapped systems, keycards address the scenario where an
+attacker wants to get the private key material. While an
+attacker could fool the keycard into signing or decrypting some
+data, this is possible only while the key is physically connected,
+and the keycard software will prompt the user for a password before
+doing the operation, though the keycard can cache the password for some time. In effect, it thwarts offline attacks: to
+brute-force the key's password, the attacker needs to be on the target
+system and try to guess the keycard's password, which will lock itself after a
+limited number of tries. It also provides for a clean and standard
+interface to store keys offline: a single GnuPG command moves private
+key material to a keycard (the <code>keytocard</code> command in the
+<code>--edit-key</code> 
+interface), whereas moving private key material to a LUKS-encrypted
+device or air-gapped computer is more complex.</p>
+
+<p>Keycards are also useful if you operate on multiple computers. A
+common problem when using GnuPG on multiple machines is how to safely
+copy and synchronize private key material among different devices, which
+introduces new security problems. Indeed, a "<span>good rule of
+thumb in a forensics lab</span>", <a
+href="https://lists.gnupg.org/pipermail/gnupg-users/2017-April/058050.html">according</a>
+to Robert J. Hansen on the GnuPG mailing list, is to "<span>store the minimum
+personal data possible on your 
+systems</span>". Keycards provide the best of both worlds here: you can use
+your private key on multiple computers without actually storing it in
+multiple places. In fact,  Mike Gerwitz went as far
+as <a href="https://lists.gnupg.org/pipermail/gnupg-users/2017-April/058068.html">saying</a>:</p>
+
+<div class="BigQuote">
+  <p>For users that need their GPG key on multiple boxes, I consider a
+  smartcard to be essential. Otherwise, the user is just furthering
+  her risk of compromise.</p>
+</div>
+
+
+
+<h4>Keycard tradeoffs</h4>
+
+<p>As Gerwitz hinted, there are multiple downsides to using a keycard,
+however. Another 
+DD, Wouter Verhelst clearly <a href="https://lists.debian.org/debian-project/2017/08/msg00020.html ">expressed</a> the
+tradeoffs:</p>
+
+<div class="BigQuote">
+  <p>Smartcards are useful. They ensure that the private half of your key
+  is never on any hard disk or other general storage device, and
+  therefore that it cannot possibly be stolen (because there's only
+  one possible copy of it).</p>
+  
+  <p>Smartcards are a pain in the ass. They ensure that the private half
+  of your key is never on any hard disk or other general storage
+  device but instead sits in your wallet, so whenever you need to
+  access it, you need to grab your wallet to be able to do so, which
+  takes more effort than just firing up GnuPG. If your laptop doesn't
+  have a builtin cardreader, you also need to fish the reader from
+  your backpack or wherever, etc.</p>
+</div>
+
+<p>
+"Smartcards" here refer to older <a
+href="https://en.wikipedia.org/wiki/OpenPGP_card">OpenPGP cards</a> that
+relied on 
+the <a href="https://en.wikipedia.org/wiki/ISO/IEC_7816">IEC 7816 smartcard connectors</a> and therefore needed a
+specially-built smartcard reader. Newer keycards simply use a
+standard USB connector. In any case, it's true that having an external
+device introduces new issues: 
+attackers can steal your keycard, you can simply lose it, or
+wash it with your dirty laundry. A laptop or a computer can also be lost, of
+course, but it is much easier to lose a small USB keycard than a full
+laptop — and I have yet to hear of someone shoving a full laptop into a
+washing machine. When you lose your keycard, unless a separate
+revocation certificate is available somewhere, you lose complete
+control of the key, which is
+catastrophic. But, even if you revoke the lost key, you need to create
+a new one, which involves rebuilding the web of trust for the key —
+a rather expensive operation as it usually requires meeting other
+OpenPGP users in person to exchange fingerprints.</p>
+
+<p>You should therefore think about how to back up the certification key,
+which is a problem that already exists for online keys; of course, everyone
+has a revocation certificates and backups of their OpenPGP
+keys... right?  In the keycard scenario, backups may be multiple
+keycards distributed geographically.
+
+<p> Note that, contrary to an air-gapped system, a key generated on a
+keycard <em>cannot</em> be backed up, by design. For subkeys, this is not a
+problem as they do not need to be backed up (except encryption keys). But,
+for a certification key, this means users need to generate the key on the
+host and transfer it to the keycard, which means the host is expected to
+have enough entropy to generate cryptographic-strength random numbers, for
+example. Also consider the 
+possibility of combining different approaches: you could, for example, use
+a keycard 
+for day-to-day operation, but keep a backup of the certification key on a
+LUKS-encrypted offline volume.</p>
+
+<p>Keycards introduce a new element into the trust chain: you need to
+trust the keycard manufacturer to not have  any hostile code
+in the key's firmware or hardware. In addition, you need to trust that the
+implementation is correct. Keycards are harder to update: the
+firmware may be deliberately inaccessible to the host for security
+reasons or may require special software to manipulate. Keycards may
+be slower than the CPU in performing certain operations because they are
+small embedded microcontrollers with limited computing power.</p>
+
+<p>Finally, keycards may <em>encourage</em> users to trust multiple machines
+with their secrets, which works against the "minimum personal data"
+principle. A completely different approach called the <a href="http://cmrg.fifthhorseman.net/wiki/TrustedPhysicalConsole">trusted physical console</a> (TPC) does the opposite: instead of trying to get private key material onto all of
+those machines, just have them on a single machine that is used
+for everything. Unlike a keycard, the TPC is 
+an actual computer, say a laptop, which has the advantage of needing no special procedure to manage
+keys. The downside is, of course, that you actually need to carry that
+laptop everywhere you go, which may be problematic, especially in some
+corporate environments that restrict bringing your own devices.</p>
+
+<h4>Quick keycard "howto"</h4>
+
+<p>Getting keys onto a keycard is easy enough:</p>
+
+<ol>
+<li><p>Start with a temporary key to test the procedure:</p>
+
+<pre>
+    export GNUPGHOME=$(mktemp -d)
+    gpg --generate-key
+</pre></li>
+<li>
+<p>Edit the key using its <a
+    href="https://manpages.debian.org/unstable/gpg/gpg.1.en.html#HOW_TO_SPECIFY_A_USER_ID">user
+    ID</a> (UID):</p>
+
+<pre>
+    gpg --edit-key <i>UID</i>
+</pre>
+</li>
+<li>
+<p>Use the <tt>key</tt> command to
+    select the first subkey, then copy it to 
+the keycard (you can also use the <code>addcardkey</code> command to just
+generate a new subkey directly on the keycard):</p>
+
+<pre>
+    gpg&gt; key 1
+    gpg&gt; keytocard
+</pre>
+</li>
+<li><p>If you want to <em>move</em> the subkey, use the <code>save</code>
+    command, which 
+    will remove the local copy of the private key, so the keycard
+will be the <em>only</em> copy of the secret key. Otherwise use the
+    <code>quit</code> 
+command to save the key on the keycard, but
+    keep the 
+secret key in your normal keyring; answer "n" to "save changes?" and "y" to "quit without saving?" . This way the keycard is a
+backup of your secret key.</p></li>
+<li><p>Once you are satisfied with the results, repeat steps 1 through 4
+with your normal keyring (unset <code>$GNUPGHOME</code>)</p></li>
+</ol>
+
+<p>When a key is moved to a keycard, <code>--list-secret-keys</code> will show it as
+<code>sec&gt;</code> (or <code>ssb&gt;</code> for subkeys) instead of the usual <code>sec</code> keyword. If
+the key is completely missing (for example, if you moved it to a LUKS
+container), the <code>#</code> sign is used instead. If you need to use a key
+from a keycard backup, you simply do <code>gpg&nbsp;--card-edit</code> with
+the key plugged in, 
+then type the <code>fetch</code> command at the prompt to fetch the public key
+that corresponds to the private key on the
+keycard (which stays on the keycard). This is the same procedure as the one
+to <a href="http://www.fsij.org/doc-gnuk/using-gnuk-token-with-another-computer.html">use the secret key on another computer</a>.</p>
+
+<h4>Conclusion</h4>
+
+<p>There are already informal <a
+href="https://riseup.net/en/security/message-security/openpgp/best-practices">OpenPGP
+best-practices guides</a> out
+there and some recommend storing keys offline, but they rarely
+explain what exactly that means. Storing your primary secret key
+offline is important in dealing with possible compromises and we
+examined the main ways of doing so: either with an air-gapped system,
+LUKS-encrypted keyring, or by using keycards. Each approach has its own
+tradeoffs, but I recommend getting familiar with keycards if you use
+multiple computers and want a standardized interface with minimal
+configuration trouble.</p>
+
+<p>And of course, those approaches can be combined. <a href="http://viccuad.me/blog/Revisited-secure-yourself-part-1-airgapped-computer-and-gpg-smartcards ">This tutorial</a>,
+for example, uses a keycard on an air-gapped computer, which neatly
+resolves the question of how to transmit signatures between the
+air-gapped system and the world. It is definitely not for the faint of
+heart, however.</p>
+
+<p>
+Once one has decided to use
+a keycard, the next order of business is to choose a specific device.
+That choice will be addressed in a followup article, where I will look at
+performance, physical design, and other considerations.
+</p><br clear="all"><table class="IndexEntries">
+           <tr><th colspan=2>Index entries for this article</th></tr>
+           <tr><td><a href="/Security/Index/">Security</a></td><td><a href="/Security/Index/#Encryption-Email">Encryption/Email</a></td></tr>
+            <tr><td><a href="/Archives/GuestIndex/">GuestArticles</a></td><td><a href="/Archives/GuestIndex/#Beaupr_Antoine">Beaupré, Antoine</a></td></tr>
+            </table><br clear="all">
+<hr width="60%" align="left">
+           (<a href="https://lwn.net/Login/?target=/Articles/734767/">Log in</a> to post comments)
+           <p>
+           
+</div> <!-- ArticleText -->
+</body></html>
+        
