@@ -24,15 +24,15 @@ const routes: Routes = [
         component: HomeComponent,
       },
       {
-        path: 'html',
+        path: 'html/:id',
         component: HtmlRendererComponent,
       },
       {
-        path: 'video',
+        path: 'video/:id',
         component: VideoRendererComponent,
       },
       {
-        path: 'pdf',
+        path: 'pdf/:id',
         component: PdfRendererComponent,
       },
     ],

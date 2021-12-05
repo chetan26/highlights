@@ -5,6 +5,7 @@ import {
   Renderer2,
   ViewChild,
 } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { AppService } from '../app.service';
 
 @Component({
@@ -15,8 +16,17 @@ import { AppService } from '../app.service';
 export class HtmlRendererComponent implements OnInit {
   // @ViewChild('content', { read: ElementRef }) contentElement: ElementRef;
   data = '';
+  id: any;
 
-  constructor(private _appService: AppService, renderer: Renderer2) {}
+  constructor(
+    private _appService: AppService,
+    private _activatedRoute: ActivatedRoute,
+    renderer: Renderer2
+  ) {
+    this._activatedRoute.paramMap.subscribe((pathParams) => {
+      this.id = pathParams.get('id');
+    });
+  }
 
   ngOnInit(): void {
     this._appService.getHtmlData().subscribe((response) => {

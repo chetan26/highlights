@@ -22,6 +22,6 @@ export class HomeComponent implements OnInit {
   }
 
   getContentUrl(data: ContentDetails): string {
-    return '/' + data.type;
+    return '/' + data.type + '/' + data.id;
   }
 }
