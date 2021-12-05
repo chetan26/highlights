@@ -1,5 +1,8 @@
 
 UI
+	Login page
+	Home page
+	Content page
 
 Backend
 	Spring Boot setup
@@ -9,12 +12,15 @@ Backend
 		
 	REST APIs
 	Video clip extractor
+		duration specified from the client is 3:10 - 3:23
+		Need to extract a clip from 3:10 to 3:23 from the original video and store it along with the highlight
+
 	Query to find the next highlight to show in the highlights portlet
 
 Integration
 	integrate all code into one box
 	get it working
-	publish it
+	publish itfor every one to have locally
 
 Presentation
 	PPT
