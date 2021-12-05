@@ -1,4 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  Renderer2,
+  ViewChild,
+} from '@angular/core';
 import { AppService } from '../app.service';
 
 @Component({
@@ -7,13 +13,15 @@ import { AppService } from '../app.service';
   styleUrls: ['./html-renderer.component.scss'],
 })
 export class HtmlRendererComponent implements OnInit {
+  // @ViewChild('content', { read: ElementRef }) contentElement: ElementRef;
   data = '';
 
-  constructor(private _appService: AppService) {}
+  constructor(private _appService: AppService, renderer: Renderer2) {}
 
   ngOnInit(): void {
     this._appService.getHtmlData().subscribe((response) => {
       this.data = response.data;
     });
+    // this.contentElement
   }
 }

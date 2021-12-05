@@ -27,6 +27,7 @@ A few weeks later...
 
 ##To start UI
 Open command prompt from following folder: 
+	angularclient > npm install --save-dev @angular-devkit/build-angular
 	angularclient > ng serve --open
 
 ## Personal Experience

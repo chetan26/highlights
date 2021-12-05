@@ -8,6 +8,7 @@ import { LoginComponent } from './login/login.component';
 import { HtmlRendererComponent } from './html-renderer/html-renderer.component';
 import { VideoRendererComponent } from './video-renderer/video-renderer.component';
 import { PdfRendererComponent } from './pdf-renderer/pdf-renderer.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { PdfRendererComponent } from './pdf-renderer/pdf-renderer.component';
     HtmlRendererComponent,
     VideoRendererComponent,
     PdfRendererComponent,
+    HomeComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
   providers: [],
