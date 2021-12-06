@@ -1,9 +1,11 @@
 package com.highlights.configuration;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.TestingAuthenticationProvider;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
@@ -14,6 +16,9 @@ import springfox.documentation.spring.web.plugins.Docket;
  */
 @Component
 public class HighlightsConfiguration {
+
+    @Value("${com.highlights.content.basePath}")
+    String contentRepositoryPath;
 
     @Bean
     public Docket productApi() {
@@ -27,6 +32,12 @@ public class HighlightsConfiguration {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**").allowedOrigins("*").allowedMethods("*");
+            }
+
+            @Override
+            public void addResourceHandlers(ResourceHandlerRegistry registry) {
+                WebMvcConfigurer.super.addResourceHandlers(registry);
+                registry.addResourceHandler("/assets/**").addResourceLocations("file:///" + contentRepositoryPath);
             }
         };
     }

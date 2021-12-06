@@ -25,3 +25,5 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+//java -Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8787,suspend=n -jar -Dcom.highlights.content.basePath=D:/work/highlights/resources .\build\libs\highlights.jar

@@ -2,234 +2,241 @@
 db.contents.insertMany(
 [
   {
-    "id": "content1",
+    "_id": "content1",
     "title": "Earth",
-    "imgUrl": "content1/demo.png",
+    "imgUrl": "earth.jpg",
     "type": "video",
     "launchUrl": "content1/earth.mp4"
   },
   {
-    "id": "content10",
+    "_id": "content10",
     "title": "Choosing what to work on",
-    "imgUrl": "content10/demo.png",
+    "imgUrl": "work.jpg",
     "type": "html",
     "launchUrl": "content10/choosing-what-to-work-on.html"
   },
   {
-    "id": "content11",
+    "_id": "content11",
     "title": "Rotate a video with VLC",
-    "imgUrl": "content11/demo.png",
+    "imgUrl": "vlc.jpg",
     "type": "pdf",
     "launchUrl": "content11/rotate_video_vlc.pdf"
   },
   {
-    "id": "content12",
-    "title": "Terminator 2: I need your clothes.mp4",
-    "imgUrl": "content12/demo.png",
+    "_id": "content12",
+    "title": "Cornerstone Connect",
+    "imgUrl": "thumbnail.png",
     "type": "video",
-    "launchUrl": "content12/terminator2.mp4"
+    "launchUrl": "content12/connect.mp4"
   },
   {
-    "id": "content13",
-    "title": "Tips on Adding JSON Output to Your CLI App",
-    "imgUrl": "content13/demo.png",
+    "_id": "content36",
+    "title": "Terminator 2: I need your clothes",
+    "imgUrl": "arnold.jpg",
+    "type": "video",
+    "launchUrl": "content36/terminator2.mp4"
+  },
+  {
+    "_id": "content13",
+    "title": "Adding JSON Output to Your CLI App",
+    "imgUrl": "json.png",
     "type": "pdf",
     "launchUrl": "content13/tips-on-adding-json-output-to-your-cli-app.pdf"
   },
   {
-    "id": "content14",
-    "title": "The 1995 Hubble photo that changed astronomy",
-    "imgUrl": "content14/demo.png",
+    "_id": "content14",
+    "title": "The Hubble photo that changed astronomy",
+    "imgUrl": "space.jpg",
     "type": "video",
     "launchUrl": "content14/1995-hubble-photo-that-changed-astronomy.mp4"
   },
   {
-    "id": "content15",
-    "title": "2017 Kia Niro starring Melissa McCarthy",
-    "imgUrl": "content15/demo.png",
+    "_id": "content15",
+    "title": "2017 Kia Niro",
+    "imgUrl": "kia.png",
     "type": "video",
     "launchUrl": "content15/2017-kia-niro.mp4"
   },
   {
-    "id": "content16",
-    "title": "AWS ReInvent Announcements",
-    "imgUrl": "content16/demo.png",
+    "_id": "content16",
+    "title": "AWS ReInvent",
+    "imgUrl": "aws.jpg",
     "type": "pdf",
     "launchUrl": "content16/reinvent-announcements.pdf"
   },
   {
-    "id": "content17",
+    "_id": "content17",
     "title": "Mars In 4K",
-    "imgUrl": "content17/demo.png",
+    "imgUrl": "mars.jpg",
     "type": "video",
     "launchUrl": "content17/mars.mp4"
   },
   {
-    "id": "content18",
-    "title": "Fastest Workers Doing Their Job Perfectly",
-    "imgUrl": "content18/demo.png",
+    "_id": "content18",
+    "title": "Workers Doing Their Job Perfectly",
+    "imgUrl": "workers.png",
     "type": "video",
     "launchUrl": "content18/fast-workers.mp4"
   },
   {
-    "id": "content19",
+    "_id": "content19",
     "title": "Extensibility over configuration",
-    "imgUrl": "content19/demo.png",
+    "imgUrl": "extensibility.png",
     "type": "html",
     "launchUrl": "content19/extensibility-over-configuration.html"
   },
   {
-    "id": "content2",
+    "_id": "content2",
     "title": "Cool URIs don't change",
-    "imgUrl": "content2/demo.png",
+    "imgUrl": "url.jpg",
     "type": "html",
     "launchUrl": "content2/cool-uris-dont-change.html"
   },
   {
-    "id": "content20",
+    "_id": "content20",
     "title": "Software Architecture Patterns",
-    "imgUrl": "content20/demo.png",
+    "imgUrl": "arch.png",
     "type": "html",
     "launchUrl": "content20/software-architecture-patterns.html"
   },
   {
-    "id": "content21",
+    "_id": "content21",
     "title": "Magnetic Games",
-    "imgUrl": "content21/demo.png",
+    "imgUrl": "magnets.jpg",
     "type": "video",
     "launchUrl": "content21/magnetic-games.mp4"
   },
   {
-    "id": "content22",
-    "title": "Improve Elasticsearch search relevance with boolean queries",
-    "imgUrl": "content22/demo.png",
+    "_id": "content22",
+    "title": "Improve search relevance",
+    "imgUrl": "search.jpg",
     "type": "pdf",
     "launchUrl": "content22/improve-elasticsearch-search-relevance.pdf"
   },
   {
-    "id": "content23",
-    "title": "Goals Nobody Would Believe If Weren't Filmed",
-    "imgUrl": "content23/demo.png",
+    "_id": "content23",
+    "title": "Impossible Goals",
+    "imgUrl": "soccer.jpg",
     "type": "video",
     "launchUrl": "content23/goals.mp4"
   },
   {
-    "id": "content24",
-    "title": "Tesla Turbine and the interesting physics behind it",
-    "imgUrl": "content24/demo.png",
+    "_id": "content24",
+    "title": "Tesla Turbine and the physics behind it",
+    "imgUrl": "tesla.jpg",
     "type": "video",
     "launchUrl": "content24/tesla-turbine.mp4"
   },
   {
-    "id": "content25",
-    "title": "Building an Application with Spring Boot",
-    "imgUrl": "content25/demo.png",
+    "_id": "content25",
+    "title": "Building with Spring Boot",
+    "imgUrl": "spring-boot.png",
     "type": "pdf",
     "launchUrl": "content25/building-with-spring-boot.pdf"
   },
   {
-    "id": "content26",
+    "_id": "content26",
     "title": "Strategies for offline PGP key storage",
-    "imgUrl": "content26/demo.png",
+    "imgUrl": "keys.png",
     "type": "html",
     "launchUrl": "content26/strategies-for-offline-pgp-key-storage.html"
   },
   {
-    "id": "content27",
-    "title": "Our Milky Way Galaxy - How Big is Space",
-    "imgUrl": "content27/demo.png",
+    "_id": "content27",
+    "title": "Our Milky Way Galaxy",
+    "imgUrl": "milky-way.jpg",
     "type": "video",
     "launchUrl": "content27/how-big-is-space.mp4"
   },
   {
-    "id": "content8",
-    "title": "How to answer questions in a helpful way",
-    "imgUrl": "content8/demo.png",
+    "_id": "content8",
+    "title": "Answer questions in a helpful way",
+    "imgUrl": "question.jpg",
     "type": "html",
     "launchUrl": "content8/how-to-answer-questions.html"
   },
   {
-    "id": "content29",
+    "_id": "content29",
     "title": "How new Linux users can succeed",
-    "imgUrl": "content29/demo.png",
+    "imgUrl": "penguin.jpg",
     "type": "html",
     "launchUrl": "content29/new-linux-users-success.html"
   },
   {
-    "id": "content3",
+    "_id": "content3",
     "title": "Kafka Streams",
-    "imgUrl": "content3/demo.png",
+    "imgUrl": "kafka.jpg",
     "type": "html",
     "launchUrl": "content3/kafka-streams.html"
   },
   {
-    "id": "content30",
-    "title": "NASA - Exploring the Inner Solar System.mp4",
-    "imgUrl": "content30/demo.png",
+    "_id": "content30",
+    "title": "Explore space with NASA",
+    "imgUrl": "nasa.jpg",
     "type": "video",
-    "launchUrl": "content30/NASA _ Exploring the Inner Solar System (Part 1_6).mp4"
+    "launchUrl": "content30/inner-solar-system.mp4"
   },
   {
-    "id": "content31",
-    "title": "Asteroid Activity with NASA at home",
-    "imgUrl": "content31/demo.png",
+    "_id": "content31",
+    "title": "Asteroid Activity with NASA",
+    "imgUrl": "nasa.jpg",
     "type": "video",
     "launchUrl": "content31/asteroid-activity.mp4"
   },
   {
-    "id": "content9",
+    "_id": "content9",
     "title": "Bayes classifier for your books",
-    "imgUrl": "content9/demo.png",
+    "imgUrl": "bayes.png",
     "type": "html",
     "launchUrl": "content9/bayes-classifier-for-your-books.html"
   },
   {
-    "id": "content33",
-    "title": "Docker Best Practice, Multi-Stage Build",
-    "imgUrl": "content32/demo.png",
+    "_id": "content33",
+    "title": "Docker Multi-Stage Build",
+    "imgUrl": "docker.png",
     "type": "html",
     "launchUrl": "content33/docker-best-practice.html"
   },
   {
-    "id": "content4",
-    "title": "knowledge-representation-in-sanskrit-and-ai.pdf",
-    "imgUrl": "content4/demo.png",
+    "_id": "content4",
+    "title": "Sanskrit and AI",
+    "imgUrl": "ai.jpg",
     "type": "pdf",
     "launchUrl": "content4/knowledge-representation-in-sanskrit-and-ai.pdf"
   },
   {
-    "id": "content5",
+    "_id": "content5",
     "title": "Is the big tech era ending?",
-    "imgUrl": "content5/demo.png",
+    "imgUrl": "big-tech.png",
     "type": "pdf",
     "launchUrl": "content5/is-the-big-tech-era-ending.pdf"
   },
   {
-    "id": "content6",
-    "title": "CNN - Breaking News, Latest News and Videos.html",
-    "imgUrl": "content6/demo.png",
+    "_id": "content6",
+    "title": "CNN - Breaking News",
+    "imgUrl": "cnn.png",
     "type": "html",
     "launchUrl": "content6/cnn.html"
   },
   {
-    "id": "content7",
+    "_id": "content7",
     "title": "Psychological Safety",
-    "imgUrl": "content7/demo.png",
+    "imgUrl": "safety.jpg",
     "type": "html",
     "launchUrl": "content7/psychological-safety.html"
   },
   {
-    "id": "content28",
-    "title": "Real-Time Exactly-Once Event Processing with Apache Flink and Kafka",
-    "imgUrl": "content28/demo.png",
+    "_id": "content28",
+    "title": "Exactly-Once Event Processing",
+    "imgUrl": "events.jpg",
     "type": "pdf",
     "launchUrl": "content28/event-processing-with-apache-flink-and-kafka.pdf"
   },
   {
-    "id": "content33",
-    "title": "What is Lemmatization and How can I do It",
-    "imgUrl": "content33/demo.png",
+    "_id": "content35",
+    "title": "What is Lemmatization",
+    "imgUrl": "nlp.png",
     "type": "pdf",
-    "launchUrl": "content33/lemmatization.pdf"
+    "launchUrl": "content35/lemmatization.pdf"
   }
 ]);

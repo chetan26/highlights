@@ -1,17 +1,39 @@
 <app-header></app-header>
-<div class="flex">
-  <div class="grow">
-    <h2>Available content:</h2>
-    <ng-container *ngFor="let info of data">
-      <br />
-      <a href="{{ getContentUrl(info) }}">{{ info.title }}</a>
-    </ng-container>
+<header>
+  <div>
   </div>
-  <div class="grow">
-    <h2>Your hightlights:</h2>
-    <ng-container *ngFor="let info of data">
-      <br />
-      <a href="{{ getContentUrl(info) }}">{{ info.title }}</a>
-    </ng-container>
+</header>
+<section>
+  <div class="flex">
+    <div class="grow available">
+      <h2>Recommended Content</h2>
+      <ng-container *ngFor="let info of data">
+        <div class="content {{info.type}}" >
+          <a href="{{ getContentUrl(info) }}">
+            <img src="{{ getContentThumbnail(info) }}" />
+            <br/>
+            <span>{{ info.title }}</span>
+          </a>
+        </div>
+      </ng-container>
+    </div>
+    <div class="grow highlight">
+      <h3>Your Highlight</h3>
+      <ng-container *ngFor="let info of data">
+        <br />
+        <a href="{{ getContentUrl(info) }}">{{ info.title }}</a>
+      </ng-container>
+    </div>
   </div>
-</div>
+</section>
+<section>
+  <div class="flex">
+    <div class="grow available">
+      <h2>History</h2>
+    </div>
+  </div>
+</section>
+
+<footer>
+
+</footer>

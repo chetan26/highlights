@@ -24,4 +24,20 @@ export class HomeComponent implements OnInit {
   getContentUrl(data: ContentDetails): string {
     return '/' + data.type + '/' + data.id;
   }
+
+  getContentThumbnail(data: ContentDetails): string {
+    //return '/assets/contents/' + data.id + '/' + data.imgUrl;
+
+    //TODO: Ask Pankaj for help changing this
+    return 'http://localhost:8080/assets/contents/' + data.id + '/' + data.imgUrl;
+  }
+
+  /*getContentFiletype(data: ContentDetails): string {
+
+    //TODO: Ask Pankaj for help changing this localhost hard-coding
+    if (data.type === 'video') return '/assets/video.png';
+    if (data.type === 'pdf') return '/assets/pdf.png';
+    else return '/assets/html.png';
+  }
+  */
 }
