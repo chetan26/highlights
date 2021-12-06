@@ -4,7 +4,6 @@ import com.highlights.common.entity.Content;
 import com.highlights.common.entity.Context;
 import com.highlights.common.entity.Highlight;
 import com.highlights.repository.ContentRepository;
-import com.highlights.repository.ContentRepository;
 import com.highlights.repository.HighlightsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
-
 
 /**
  * @author curkudkar on 12/5/21

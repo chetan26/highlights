@@ -3,7 +3,6 @@ package com.highlights.repository;
 import com.highlights.common.entity.Highlight;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
-
 import java.util.List;
 import java.util.Optional;
 
