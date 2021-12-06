@@ -69,4 +69,9 @@ public class HighlightController {
         highlightService.saveHighlights(highlight);
     }
 
+    @GetMapping(value = "/highlight")
+    public Highlight getNextHighlight()  {
+        return highlightService.getNextHighlight();
+    }
+
 }

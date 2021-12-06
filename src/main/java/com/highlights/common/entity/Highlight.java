@@ -17,6 +17,7 @@ public class Highlight {
     private Trim trim;
     public String createdOn;
     public String updatedOn;
+    public boolean accessed;
 
     public String getId() {
         return id;
@@ -106,6 +107,9 @@ public class Highlight {
         this.trim = trim;
     }
 
+    public boolean getAccessed() { return accessed; }
+
+    public void setAccessed(boolean accessed) { this.accessed = accessed; }
 
     public static final class HighlightBuilder {
         public String createdOn;

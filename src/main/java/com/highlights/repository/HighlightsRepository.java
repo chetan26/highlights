@@ -18,4 +18,5 @@ public interface HighlightsRepository extends MongoRepository<Highlight,String> 
     public List<Highlight> findByUserId(String contentId);
     public List<Highlight> findByUserIdAndContentId(String userId, String contentId, Sort sort);
     public Optional<Highlight> findById(String id);
+    public Optional<List<Highlight>> findByUserIdAndAccessedFalse(String userId,Sort sort);
 }
