@@ -9,5 +9,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  */
 public interface HighlightsRepository extends MongoRepository<Highlight,String> {
 
-    public Highlight findByIdAndContent(String id, Content content);
+    public Highlight findByIdAndContentId(String id, String contentId);
 }
