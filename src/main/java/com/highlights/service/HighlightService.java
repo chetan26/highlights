@@ -109,7 +109,7 @@ public class HighlightService {
                 }
             }
         }catch (Exception e){
-            System.out.println(e);
+            System.out.println("Error occurred "+ e);
         }
 
         return output;

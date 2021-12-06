@@ -79,5 +79,4 @@ public class HighlightController {
         return highlightService.getContent(contentId,"html");
     }
 
-
 }
