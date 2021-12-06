@@ -7,7 +7,7 @@ import com.highlights.common.entity.Highlight;
  */
 public interface HighlightDataService {
 
-    public void persistHighlightData(Highlight highlight);
+    public void persistHighlightData(Highlight highlight) ;
 
     public boolean canHandle(String type);
 }
