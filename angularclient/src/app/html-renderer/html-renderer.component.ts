@@ -174,45 +174,47 @@ export class HtmlRendererComponent implements OnInit {
           offset: 0,
         },
         source: 'TODO',
-        text: this.selectedText,
+        text: this.selectedTextWithHtml,
         trim: {
           from: this.selectedWordIndex,
-          to: this.selectedWordIndex + this.selectedText.length - 1 + '',
+          to: this.selectedWordIndex + this.selectedTextWithHtml.length + '',
         },
         type: 'html',
       };
       this._appService.saveHighLightedText(json).subscribe((response) => {
         this.highlightTheSelectedText(
           this.selectedWordIndex,
-          this.selectedText,
+          this.selectedTextWithHtml,
           this.note
         );
         this.hideTheDiv();
       });
     }
-    console.log('highlightTheText');
   }
 
   highlightTheSelectedText(startIndex?: any, word?: any, comment?: any): void {
     let finalString = '';
     const currentData = this.data;
-    if (startIndex > 1) {
+    if (parseInt(startIndex) > 1) {
       finalString =
-        currentData.substring(0, startIndex) +
-        '<mark title=' +
+        currentData.substring(0, parseInt(startIndex)) +
+        '<mark title=" ' +
         comment +
-        '>' +
-        currentData.substring(startIndex, startIndex + word.length) +
+        '" >' +
+        currentData.substring(
+          parseInt(startIndex),
+          parseInt(startIndex) + word.length
+        ) +
         '</mark>' +
-        currentData.substring(startIndex + word.length);
+        currentData.substring(parseInt(startIndex) + word.length);
     } else {
       finalString =
         '<mark title=' +
         comment +
         '>' +
-        currentData.substring(startIndex, startIndex + word.length) +
+        currentData.substring(parseInt(startIndex), startIndex + word.length) +
         '</mark>' +
-        currentData.substring(startIndex + word.length);
+        currentData.substring(parseInt(startIndex) + word.length);
     }
     this.data = finalString;
   }
