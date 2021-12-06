@@ -11,9 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ResourceUtils;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -123,5 +128,18 @@ public class HighlightService {
     }
     public void deleteHighlightById(String id){
         highlightsRepository.deleteById(id);
+    }
+
+    public Highlight getNextHighlight(){
+        String loggedInUser=(String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<List<Highlight>> highlights = highlightsRepository.findByUserIdAndAccessedFalse(loggedInUser,Sort.by(Sort.Direction.ASC, "createdOn"));
+        if(highlights.isPresent() && !CollectionUtils.isEmpty(highlights.get())){
+            Highlight highlight = highlights.get().get(0);
+            highlight.setUpdatedOn(Instant.now().toString());
+            highlight.setAccessed(true);
+            highlightsRepository.save(highlight);
+            return highlight;
+        }
+        return null;
     }
 }

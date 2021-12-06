@@ -411,8 +411,7 @@ export class AppService {
   }
 
   getHtmlData(contentId: string): Observable<any> {
-    // return this.http.get<any>(baseUrl + ''/highlights/html/' + contentId');
-    return of(this.responseData);
+    return this.http.get<any>(baseUrl + '/highlights/html/' + contentId);
   }
 
   getHighlightsData(contentId: string): Observable<HighlightData[]> {
