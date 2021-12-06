@@ -6,11 +6,11 @@
 ></div>
 
 <div style="width: 30px" #highlightContent hidden>
-  <textarea style="height: 100px; width: 300px" [(ngModel)]="note"></textarea>
+  <textarea [(ngModel)]="note"></textarea>
   <div class="flex-row">
-    <button style="margin-right: 5px" (click)="saveHighlightText()">
+    <button class="button-green"(click)="saveHighlightText()">
       Save
     </button>
-    <button (click)="hideTheDiv()">Cancel</button>
+    <button class="button-cancel" (click)="hideTheDiv()">Cancel</button>
   </div>
 </div>
