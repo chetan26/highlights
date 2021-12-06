@@ -3,11 +3,15 @@ package com.highlights.service;
 import com.highlights.common.entity.Content;
 import com.highlights.common.entity.Context;
 import com.highlights.common.entity.Highlight;
+import com.highlights.repository.ContentRepository;
 import com.highlights.repository.HighlightsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -21,6 +25,9 @@ public class HighlightService {
 
     @Autowired
     private HighlightsRepository highlightsRepository;
+
+    @Autowired
+    private ContentRepository contentRepository;
 
     public void saveHighlights(Highlight highlightData){
         highLightFactory.getHighlightProvider(highlightData.getType());
@@ -36,9 +43,35 @@ public class HighlightService {
             }
             highlight.setUpdatedOn(Instant.now().toString());
         }else{
-            highlightsRepository.save(highlight);
+            highlightData.setCreatedOn(Instant.now().toString());
+            highlightsRepository.save(highlightData);
         }
     }
 
+    public Highlight getHighlightById(String highlightId){
+        Optional<Highlight> highlight = highlightsRepository.findById(highlightId);
+        return highlight.isPresent()?highlight.get():null;
+    }
 
+    public List<Content> getAvailableContent(){
+        return contentRepository.findAll();
+    }
+    public List<Highlight> getContentHighlights(String contentId){
+        return highlightsRepository.findByContentId(contentId);
+    }
+
+    public List<Highlight> getHighlightByUserIdandContentId(String userId,String contentId){
+        return highlightsRepository.findByUserIdAndContentId(userId,contentId, Sort.by(Sort.Direction.DESC, "createdOn"));
+    }
+
+    public List<Highlight> getHighlightByUserId(String userId){
+        return highlightsRepository.findByUserId(userId);
+    }
+
+    public List<Highlight> getAllHighlights(){
+        return highlightsRepository.findAll();
+    }
+    public void deleteHighlightById(String id){
+        highlightsRepository.deleteById(id);
+    }
 }
