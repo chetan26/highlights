@@ -411,8 +411,14 @@ export class AppService {
   }
 
   getHtmlData(contentId: string): Observable<any> {
-    // return this.http.get<any>(baseUrl + '/highlights/html/' + contentId);
+    // return this.http.get<any>(baseUrl + ''/highlights/html/' + contentId');
     return of(this.responseData);
+  }
+
+  getHighlightsData(contentId: string): Observable<HighlightData[]> {
+    return this.http.get<HighlightData[]>(
+      baseUrl + '/highlights/content/' + contentId + '/highlights'
+    );
   }
 
   changeResponseData(data: any) {

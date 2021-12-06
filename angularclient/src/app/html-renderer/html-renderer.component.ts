@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppService } from '../app.service';
+import { HighlightData } from '../html-data';
 
 @Component({
   selector: 'app-html-renderer',
@@ -30,6 +31,7 @@ export class HtmlRendererComponent implements OnInit {
   selectedWordIndex: any;
   selectedHighlight: any;
   selection: any;
+  currentHighlightsData: HighlightData[] = [];
 
   constructor(
     private _appService: AppService,
@@ -45,6 +47,18 @@ export class HtmlRendererComponent implements OnInit {
   ngOnInit(): void {
     this._appService.getHtmlData(this.contentId).subscribe((response) => {
       this.data = response;
+    });
+
+    this._appService.getHighlightsData(this.contentId).subscribe((response) => {
+      this.currentHighlightsData = response;
+
+      this.currentHighlightsData.forEach((item) => {
+        this.highlightTheSelectedText(
+          item.trim.from,
+          item.text,
+          item.context.note
+        );
+      });
     });
   }
 
@@ -164,40 +178,32 @@ export class HtmlRendererComponent implements OnInit {
       this._appService.saveHighLightedText(json).subscribe((response) => {
         this.highlightTheSelectedText(
           this.selectedWordIndex,
-          this.selectedText
+          this.selectedText,
+          this.note
         );
         this.hideTheDiv();
       });
     }
-
-    // });
-
-    // this._router.navigate(['.'], {
-    //   relativeTo: this._activatedRoute,
-    // });
-    //this._appService.changeResponseData(this.data);
-    //window.location.reload();
-    // let currentUrl = this._router.url;
-    // this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-    //   this._router.navigate([currentUrl]);
-    // });
-
     console.log('highlightTheText');
   }
 
-  highlightTheSelectedText(startIndex?: any, word?: any): void {
+  highlightTheSelectedText(startIndex?: any, word?: any, comment?: any): void {
     let finalString = '';
     const currentData = this.data;
     if (startIndex > 1) {
       finalString =
         currentData.substring(0, startIndex) +
-        '<mark>' +
+        '<mark title=' +
+        comment +
+        '>' +
         currentData.substring(startIndex, startIndex + word.length) +
         '</mark>' +
         currentData.substring(startIndex + word.length);
     } else {
       finalString =
-        '<mark>' +
+        '<mark title=' +
+        comment +
+        '>' +
         currentData.substring(startIndex, startIndex + word.length) +
         '</mark>' +
         currentData.substring(startIndex + word.length);
