@@ -7,7 +7,6 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppService } from '../app.service';
-import { HighlightData } from '../html-data';
 
 @Component({
   selector: 'app-html-renderer',
@@ -29,7 +28,6 @@ export class HtmlRendererComponent implements OnInit {
   selectedText: any;
   previousOffSet: any;
   selectedWordIndex: any;
-  selectedEndWordIndex: any;
   selectedHighlight: any;
   selection: any;
 
@@ -45,8 +43,8 @@ export class HtmlRendererComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this._appService.getHtmlData().subscribe((response) => {
-      this.data = response.data;
+    this._appService.getHtmlData(this.contentId).subscribe((response) => {
+      this.data = response;
     });
   }
 
@@ -89,6 +87,10 @@ export class HtmlRendererComponent implements OnInit {
   }
 
   findTheIndexOfWord(): void {
+    const removeAllThings = this.data
+      .replace(/(\n|\r)/gm, '..')
+      .replace(/ +(?= )/g, '');
+
     if (
       this.selectedText ==
       this.data.substring(
@@ -97,14 +99,13 @@ export class HtmlRendererComponent implements OnInit {
       )
     ) {
       this.selectedWordIndex = this.data.indexOf(this.selectedText);
-      this.selectedEndWordIndex =
-        this.data.indexOf(this.selectedText) + this.selectedText.length;
+    } else if (this.data.indexOf(this.selectedText) != -1) {
+      this.selectedWordIndex = this.data.indexOf(this.selectedText);
+    } else if (removeAllThings.indexOf(this.selectedText) != -1) {
+      this.selectedWordIndex = removeAllThings.indexOf(this.selectedText);
     } else {
-      this.selectedWordIndex = this.selection.anchorOffset;
+      this.selectedWordIndex = null;
     }
-
-    console.log(this.selection.anchorOffset);
-    console.log(this.data.indexOf(this.selectedText));
   }
 
   mouseUp(): void {
@@ -117,17 +118,17 @@ export class HtmlRendererComponent implements OnInit {
       this._renderer.setStyle(
         this.highlightContentElement?.nativeElement,
         'position',
-        'absolute'
-      );
-      this._renderer.setStyle(
-        this.highlightContentElement?.nativeElement,
-        'left',
-        item[0].left + 'px'
+        'fixed'
       );
       this._renderer.setStyle(
         this.highlightContentElement?.nativeElement,
         'top',
-        item[0].top + 35 + 'px'
+        '50%'
+      );
+      this._renderer.setStyle(
+        this.highlightContentElement?.nativeElement,
+        'left',
+        '50%'
       );
 
       if (this.selectedText) {
@@ -142,69 +143,64 @@ export class HtmlRendererComponent implements OnInit {
 
   saveHighlightText(): void {
     this.findTheIndexOfWord();
-    const json: HighlightData = {
-      contentId: this.contentId,
-      context: {
-        note: this.note,
-      },
-      location: {
-        ancestorId: 'TODO',
-        offset: 0,
-      },
-      source: 'TODO',
-      text: this.selectedText,
-      trim: {
-        from: this.selectedWordIndex,
-        to: this.selectedWordIndex + this.selectedText.length - 1 + '',
-      },
-      type: 'html',
-    };
-
-    this.highlightTheSelectedText();
-    this.hideTheDiv();
-    // this._appService.saveHighLightedText(json).subscribe((response) => {
+    if (this.selectedWordIndex) {
+      const json = {
+        contentId: this.contentId,
+        context: {
+          note: this.note,
+        },
+        location: {
+          ancestorId: 'TODO',
+          offset: 0,
+        },
+        source: 'TODO',
+        text: this.selectedText,
+        trim: {
+          from: this.selectedWordIndex,
+          to: this.selectedWordIndex + this.selectedText.length - 1 + '',
+        },
+        type: 'html',
+      };
+      this._appService.saveHighLightedText(json).subscribe((response) => {
+        this.highlightTheSelectedText(
+          this.selectedWordIndex,
+          this.selectedText
+        );
+        this.hideTheDiv();
+      });
+    }
 
     // });
 
     // this._router.navigate(['.'], {
     //   relativeTo: this._activatedRoute,
     // });
-    this._appService.changeResponseData(this.data);
+    //this._appService.changeResponseData(this.data);
     //window.location.reload();
-    let currentUrl = this._router.url;
-    this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-      this._router.navigate([currentUrl]);
-    });
+    // let currentUrl = this._router.url;
+    // this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+    //   this._router.navigate([currentUrl]);
+    // });
 
     console.log('highlightTheText');
   }
 
-  highlightTheSelectedText(): void {
+  highlightTheSelectedText(startIndex?: any, word?: any): void {
     let finalString = '';
     const currentData = this.data;
-    if (this.selectedWordIndex > 1) {
+    if (startIndex > 1) {
       finalString =
-        currentData.substring(0, this.selectedWordIndex) +
+        currentData.substring(0, startIndex) +
         '<mark>' +
-        currentData.substring(
-          this.selectedWordIndex,
-          this.selectedWordIndex + this.selectedText.length
-        ) +
+        currentData.substring(startIndex, startIndex + word.length) +
         '</mark>' +
-        currentData.substring(
-          this.selectedWordIndex + this.selectedText.length
-        );
+        currentData.substring(startIndex + word.length);
     } else {
       finalString =
         '<mark>' +
-        currentData.substring(
-          this.selectedWordIndex,
-          this.selectedWordIndex + this.selectedText.length
-        ) +
+        currentData.substring(startIndex, startIndex + word.length) +
         '</mark>' +
-        currentData.substring(
-          this.selectedWordIndex + this.selectedText.length
-        );
+        currentData.substring(startIndex + word.length);
     }
     this.data = finalString;
   }
