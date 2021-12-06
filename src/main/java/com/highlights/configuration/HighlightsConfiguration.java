@@ -21,7 +21,7 @@ public class HighlightsConfiguration {
                 .apis(RequestHandlerSelectors.basePackage("com.highlights")).build();
     }
 
-    /*@Bean
+    @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
@@ -29,7 +29,7 @@ public class HighlightsConfiguration {
                 registry.addMapping("/**").allowedOrigins("*").allowedMethods("*");
             }
         };
-    }*/
+    }
 
 
 

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class TextHighlightService implements HighlightDataService {
     @Override
-    public void persistHighlightData(Highlight highlight) {
+    public void persistHighlightData(Highlight highlight,String finalContentLocation) {
 
     }
 

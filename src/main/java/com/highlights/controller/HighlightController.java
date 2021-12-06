@@ -69,4 +69,10 @@ public class HighlightController {
         highlightService.saveHighlights(highlight);
     }
 
+    @GetMapping(value = "/highlights/html/{contentId}")
+    public String getContent(@PathVariable(value="contentId")String contentId){
+        return highlightService.getContent(contentId,"html");
+    }
+
+
 }
