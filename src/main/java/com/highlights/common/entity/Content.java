@@ -28,6 +28,7 @@ public class Content {
         this.version=version;
         this.launchUrl=launchUrl;
     }
+    public Content(){ }
 
     public Content(String id) {
         this.id = id;

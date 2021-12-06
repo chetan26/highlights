@@ -30,16 +30,24 @@ public class HighlightController {
         contentCreationService.createOrUpdateContent();
     }
 
-
     @GetMapping(value = "/available-contents")
     public List<Content> getAvailableContent()  {
-        return null;
+        return highlightService.getAvailableContent();
     }
 
-    @GetMapping(value = "/highlight", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Highlight getHighlight(@RequestBody String highlightId)  {
-        Highlight h = new Highlight(); h.setContentId("test");
-        return h;
+    @GetMapping(value = "highlight", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Highlight> getAllHighlight()  {
+        return highlightService.getAllHighlights();
+    }
+
+    @GetMapping(value = "/highlight/{highlightId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Highlight getHighlightById(@PathVariable(value="highlightId")String highlightId)  {
+        return highlightService.getHighlightById(highlightId);
+    }
+
+    @GetMapping(value = "{userId}/content/{contentId}/highlights", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Highlight> getHighlightByUserIdandContentId(@PathVariable(value="contentId")String contentId, @PathVariable(value="userId")String userId)  {
+        return highlightService.getHighlightByUserIdandContentId(userId,contentId);
     }
 
     @PutMapping(value = "/me/config")
@@ -47,9 +55,13 @@ public class HighlightController {
         return null;
     }
 
+    @DeleteMapping(value = "/{highlightId}")
+    public void deleteHighlightById(@PathVariable(value="highlightId")String highlightId)  {
+        highlightService.deleteHighlightById(highlightId);
+    }
     @GetMapping(value = "/content/{contentId}/highlights",produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Highlight> getContentHighlights(@PathVariable(value="contentId")String contentId)  {
-        return null;
+        return highlightService.getContentHighlights(contentId);
     }
 
     @PostMapping(value = "/content/highlight")
