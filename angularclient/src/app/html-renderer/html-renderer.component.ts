@@ -27,6 +27,7 @@ export class HtmlRendererComponent implements OnInit {
   note = '';
   contentId: any;
   selectedText: any;
+  selectedTextWithHtml: any;
   previousOffSet: any;
   selectedWordIndex: any;
   selectedHighlight: any;
@@ -101,10 +102,6 @@ export class HtmlRendererComponent implements OnInit {
   }
 
   findTheIndexOfWord(): void {
-    const removeAllThings = this.data
-      .replace(/(\n|\r)/gm, '..')
-      .replace(/ +(?= )/g, '');
-
     if (
       this.selectedText ==
       this.data.substring(
@@ -115,17 +112,26 @@ export class HtmlRendererComponent implements OnInit {
       this.selectedWordIndex = this.data.indexOf(this.selectedText);
     } else if (this.data.indexOf(this.selectedText) != -1) {
       this.selectedWordIndex = this.data.indexOf(this.selectedText);
-    } else if (removeAllThings.indexOf(this.selectedText) != -1) {
-      this.selectedWordIndex = removeAllThings.indexOf(this.selectedText);
+    } else if (this.data.indexOf(this.selectedTextWithHtml) != -1) {
+      this.selectedWordIndex = this.data.indexOf(this.selectedTextWithHtml);
     } else {
       this.selectedWordIndex = null;
+      this.hideTheDiv();
     }
   }
 
   mouseUp(): void {
     this.setSelected();
+
     if (this.selection) {
-      const item = this.selection?.getRangeAt(0).cloneRange().getClientRects();
+      const sel = window.getSelection();
+      if (sel?.rangeCount) {
+        var container = document.createElement('div');
+        for (var i = 0, len = sel.rangeCount; i < len; ++i) {
+          container.appendChild(sel.getRangeAt(i).cloneContents());
+        }
+        this.selectedTextWithHtml = container.innerHTML?.toString();
+      }
 
       this.selectedText = this.selection.toString();
 
