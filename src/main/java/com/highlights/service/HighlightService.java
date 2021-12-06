@@ -4,8 +4,10 @@ import com.highlights.common.entity.Content;
 import com.highlights.common.entity.Context;
 import com.highlights.common.entity.Highlight;
 import com.highlights.repository.ContentRepository;
+import com.highlights.repository.ContentRepository;
 import com.highlights.repository.HighlightsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -29,21 +31,23 @@ public class HighlightService {
     @Autowired
     private ContentRepository contentRepository;
 
-    public void saveHighlights(Highlight highlightData){
-        highLightFactory.getHighlightProvider(highlightData.getType());
     public void saveHighlights(Highlight highlightData) {
+        String loggedInUser=(String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         highLightFactory.getHighlightProvider(highlightData.getType()).persistHighlightData(highlightData);
         //after the highlight factory has done their custom implementation
         //create a highlight entry in mongo for the content. ui should send a uniqueId for every highlight.
         //the highlight will be persisted in mongo for that content as well as the content repository and will be the unique identifier in case of fetch
         //application.properties has the property for content rep
-        Highlight highlight = highlightsRepository.findByIdAndContentId(highlightData.getId(), highlightData.getContentId());
+        //save highlights for the logged in user
+        Highlight highlight = highlightsRepository.findByIdAndContentIdAndUserId(highlightData.getId(), highlightData.getContentId(),loggedInUser);
         if (highlight != null) {
             Context newContext = highlight.getContext();
             if (newContext != null) {
                 highlight.setContext(newContext);
             }
             highlight.setUpdatedOn(Instant.now().toString());
+            highlight.setUserId(loggedInUser);
+            highlightsRepository.save(highlight);
         } else {
             Highlight high = Highlight.HighlightBuilder.aHighlight()
                     .withContentId(highlightData.getContentId())
@@ -55,7 +59,7 @@ public class HighlightService {
                     .withText(highlightData.getText())
                     .withTrim(highlightData.getTrim())
                     .withType(highlightData.getType())
-                    .withUserId(highlightData.getUserId())
+                    .withUserId(loggedInUser)
                     .build();
             highlightsRepository.save(high);
         }

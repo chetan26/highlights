@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface HighlightsRepository extends MongoRepository<Highlight,String> {
 
     //method to find highlight
-    public Highlight findByIdAndContentId(String id, String contentId);
+    public Highlight findByIdAndContentIdAndUserId(String id, String contentId,String userId);
     public List<Highlight> findAll();
     public List<Highlight> findByContentId(String contentId);
     public List<Highlight> findByUserId(String contentId);

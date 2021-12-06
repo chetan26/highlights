@@ -1,6 +1,7 @@
 package com.highlights.configuration;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.TestingAuthenticationProvider;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -20,7 +21,7 @@ public class HighlightsConfiguration {
                 .apis(RequestHandlerSelectors.basePackage("com.highlights")).build();
     }
 
-    @Bean
+    /*@Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
@@ -28,5 +29,15 @@ public class HighlightsConfiguration {
                 registry.addMapping("/**").allowedOrigins("*").allowedMethods("*");
             }
         };
+    }*/
+
+
+
+    @Bean
+    public TestingAuthenticationProvider authenticationProvider() {
+        final TestingAuthenticationProvider authProvider = new TestingAuthenticationProvider();
+        //authProvider.setUserDetailsService(userDetailsService);
+        //authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
     }
 }

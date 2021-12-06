@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @RestController
 public class LoginController {
@@ -13,7 +14,7 @@ public class LoginController {
     LoginService loginService;
 
     @PostMapping(value = "/login")
-    public ResponseEntity<String> loginUser(@RequestBody LoginInput loginInput)  {
+    public UserDetails loginUser(@RequestBody LoginInput loginInput)  {
         return loginService.loginUser(loginInput);
     }
 }
