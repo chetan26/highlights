@@ -182,9 +182,7 @@ Return an array of highlight objects
 
 ## Content Page: Save a highlight 
 
-POST @ /highlights/content/highlight/html
-POST @ /highlights/content/highlight/pdf
-POST @ /highlights/content/highlight/video
+POST @ /highlights/content/highlight
 
 Return nothing. Request below.
 
@@ -192,6 +190,7 @@ Return nothing. Request below.
 
 	{
 		"contentId":"content1",
+		"type":"", //video,html,pdf
 		"text":"We are strong as long as we are in this together",
 		"location" :{
 			"ancestor-id":"main-content-div",
@@ -199,6 +198,10 @@ Return nothing. Request below.
 		},
 		"context": {
 			"notes":"Catchy phrase!"
+		},
+		"trim":{
+		   "from":"00:00:10",
+		   "to":"00:00:20"
 		}
 	}
 ```

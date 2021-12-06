@@ -1,7 +1,9 @@
-package com.highlights.demo;
+package com.highlights.controller;
 
 import com.highlights.common.entity.Content;
 import com.highlights.common.entity.Highlight;
+import com.highlights.service.ContentCreationService;
+import com.highlights.service.HighlightService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
+
+/**
+ * @author curkudkar on 12/5/21
+ */
 @RestController
 @RequestMapping("/highlights")
 public class HighlightController {
@@ -47,7 +53,8 @@ public class HighlightController {
     }
 
     @PostMapping(value = "/content/highlight")
-    public void saveContentHighlight()  {
+    public void saveContentHighlight(@RequestBody Highlight highlight)  {
+        highlightService.saveHighlights(highlight);
     }
 
 }

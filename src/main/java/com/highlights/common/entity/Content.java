@@ -14,9 +14,10 @@ public class Content {
     private int highlights;
     private String code;
     private int version;
+    private String launchUrl;
 
 
-    public Content(String id, String title, String type, String imgUrl, String duration, int highlights,String code,int version) {
+    public Content(String id, String title, String type, String imgUrl, String duration, int highlights,String code,int version,String launchUrl) {
         this.id = id;
         this.title = title;
         this.type = type;
@@ -25,6 +26,11 @@ public class Content {
         this.highlights = highlights;
         this.code=code;
         this.version=version;
+        this.launchUrl=launchUrl;
+    }
+
+    public Content(String id) {
+        this.id = id;
     }
 
     public String getId() {
@@ -89,5 +95,13 @@ public class Content {
 
     public void setVersion(int version) {
         this.version = version;
+    }
+
+    public String getLaunchUrl() {
+        return launchUrl;
+    }
+
+    public void setLaunchUrl(String launchUrl) {
+        this.launchUrl = launchUrl;
     }
 }

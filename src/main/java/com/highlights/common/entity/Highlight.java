@@ -6,14 +6,17 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document("highlights")
 public class Highlight {
     @Id
-    public String id;
-    public String userId;
-    public String contentId;
-    public String text;
-    public Location location;
-    public Context context;
-    public String type;
-    public String source;
+    private String id;
+    private String userId;
+    private String contentId;
+    private String text;
+    private Location location;
+    private Context context;
+    private String type;
+    private String source;
+    private Trim trim;
+    public String createdOn;
+    public String updatedOn;
 
     public String getId() {
         return id;
@@ -87,30 +90,24 @@ public class Highlight {
         this.createdOn = createdOn;
     }
 
-    public String createdOn;
-
-}
-
-class Location{
-    public String ancestorId;
-    public int offset;
-
-    public String getAncestorId() {
-        return ancestorId;
+    public String getUpdatedOn() {
+        return updatedOn;
     }
 
-    public void setAncestorId(String ancestorId) {
-        this.ancestorId = ancestorId;
+    public void setUpdatedOn(String updatedOn) {
+        this.updatedOn = updatedOn;
     }
 
-    public int getOffset() {
-        return offset;
+    public Trim getTrim() {
+        return trim;
     }
 
-    public void setOffset(int offset) {
-        this.offset = offset;
+    public void setTrim(Trim trim) {
+        this.trim = trim;
     }
 }
 
-class Context{
-}
+
+
+
+

@@ -1,4 +1,4 @@
-package com.highlights.demo;
+package com.highlights.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
