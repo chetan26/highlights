@@ -52,7 +52,6 @@ export class HtmlRendererComponent implements OnInit {
 
     this._appService.getHighlightsData(this.contentId).subscribe((response) => {
       this.currentHighlightsData = response;
-
       this.currentHighlightsData.forEach((item) => {
         this.highlightTheSelectedText(
           item.trim.from,

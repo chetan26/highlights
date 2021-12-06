@@ -9,6 +9,7 @@ import { HtmlRendererComponent } from './html-renderer/html-renderer.component';
 import { VideoRendererComponent } from './video-renderer/video-renderer.component';
 import { PdfRendererComponent } from './pdf-renderer/pdf-renderer.component';
 import { HomeComponent } from './home/home.component';
+import { HeaderComponent } from './header/header.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { HomeComponent } from './home/home.component';
     VideoRendererComponent,
     PdfRendererComponent,
     HomeComponent,
+    HeaderComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
   providers: [],
