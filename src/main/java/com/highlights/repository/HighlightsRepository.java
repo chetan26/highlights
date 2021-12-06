@@ -9,5 +9,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  */
 public interface HighlightsRepository extends MongoRepository<Highlight,String> {
 
+    //method to find highligh
     public Highlight findByIdAndContentId(String id, String contentId);
 }

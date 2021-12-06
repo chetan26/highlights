@@ -27,6 +27,7 @@ public class HighlightService {
         //after the highlight factory has done their custom implementation
         //create a highlight entry in mongo for the content. ui should send a uniqueId for every highlight.
         //the highlight will be persisted in mongo for that content as well as the content repository and will be the unique identifier in case of fetch
+        //application.properties has the property for content rep
         Highlight highlight=highlightsRepository.findByIdAndContentId(highlightData.getId(),highlightData.getContentId());
         if(highlight!=null){
             Context newContext=highlight.getContext();
