@@ -1,4 +1,4 @@
-<div #content>
+<div #content (mousedown)="mouseDown()" (mouseup)="mouseUp()">
   Awesome" began as a cabaret act thrown together by seven experienced fringe
   theater actors. Although they continued to perform in theatrical venues, their
   identity as a band and cabaret act has eclipsed their status as actors.[3]
@@ -15,4 +15,23 @@
   The Long Winters.[5]
 </div>
 
-{{ id }}
+<div style="margin-top: 50px">
+  <h1>Current highlight</h1>
+</div>
+
+<div style="width: 30px" #highlightContent hidden>
+  <textarea
+    style="height: 100px; width: 300px"
+    [(ngModel)]="myTextarea"
+  ></textarea>
+  <div class="flex-row">
+    <button
+      #buttonToCopy
+      style="margin-right: 5px"
+      (click)="highlightTheText()"
+    >
+      Save
+    </button>
+    <button #buttonToCopy (click)="hideTheDiv()">Cancel</button>
+  </div>
+</div>

@@ -1,8 +1,8 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { of } from 'rxjs';
-import { ContentDetails, HtmlData } from './html-data';
+import { ContentDetails, HighlightData, HtmlData } from './html-data';
 
 const baseUrl = 'http://localhost:8080';
 
@@ -90,7 +90,7 @@ export class AppService {
     return of(result);
   }
 
-  saveHighLightedText(text: string): Observable<any> {
-    return this.http.post<any>(baseUrl + '/text', text);
+  saveHighLightedText(data: HighlightData): Observable<any> {
+    return this.http.post<any>(baseUrl + '/text', data);
   }
 }
