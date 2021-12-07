@@ -23,6 +23,8 @@ export class HtmlRendererComponent implements OnInit {
     | ElementRef
     | undefined;
 
+  @ViewChild('noteDiv', { static: false }) noteElement: ElementRef | undefined;
+
   data = '';
   note = '';
   contentId: any;
@@ -48,17 +50,19 @@ export class HtmlRendererComponent implements OnInit {
   ngOnInit(): void {
     this._appService.getHtmlData(this.contentId).subscribe((response) => {
       this.data = response;
-    });
 
-    this._appService.getHighlightsData(this.contentId).subscribe((response) => {
-      this.currentHighlightsData = response;
-      this.currentHighlightsData.forEach((item) => {
-        this.highlightTheSelectedText(
-          item.trim.from,
-          item.text,
-          item.context.note
-        );
-      });
+      this._appService
+        .getHighlightsData(this.contentId)
+        .subscribe((response1) => {
+          this.currentHighlightsData = response1;
+          this.currentHighlightsData.forEach((item) => {
+            this.highlightTheSelectedText(
+              item.trim.from,
+              item.text,
+              item.context.note
+            );
+          });
+        });
     });
   }
 
@@ -156,6 +160,7 @@ export class HtmlRendererComponent implements OnInit {
           'hidden',
           false
         );
+        this.noteElement?.nativeElement.focus();
       }
     }
   }

@@ -1,3 +1,4 @@
+<app-header></app-header>
 <div
   #content
   (mousedown)="mouseDown()"
@@ -6,9 +7,13 @@
 ></div>
 
 <div style="width: 30px" #highlightContent hidden>
-  <textarea [(ngModel)]="note"></textarea>
+  <textarea #noteDiv [(ngModel)]="note"></textarea>
   <div class="flex-row">
-    <button class="button-green"(click)="saveHighlightText()">
+    <button
+      class="button-green"
+      style="margin-right: 10px"
+      (click)="saveHighlightText()"
+    >
       Save
     </button>
     <button class="button-cancel" (click)="hideTheDiv()">Cancel</button>

@@ -6,19 +6,14 @@ import com.highlights.common.entity.Highlight;
 import com.highlights.configuration.HighlightsApplicationContext;
 import com.highlights.repository.ContentRepository;
 import com.highlights.repository.HighlightsRepository;
-import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -79,7 +74,7 @@ public class HighlightService {
                     .withType(highlightData.getType())
                     .withUserId(loggedInUser)
                     .build();
-            highlight.setAccessed(false);
+            high.setAccessed(false);
             highlightsRepository.save(high);
         }
     }
@@ -105,9 +100,10 @@ public class HighlightService {
                 if (content.isPresent()) {
                     Content content1 = content.get();
                     String launchUrl = content1.getLaunchUrl();
+
                     String contentRepoLocation = HighlightsApplicationContext.getApplicationContext().getEnvironment().getProperty("com.highlights.content.basePath", "/resources");
                     File f = new File(contentRepoLocation+ File.separator + launchUrl);
-                    output=Jsoup.parse(f,"UTF-8").wholeText();
+                    output=new String ( Files.readAllBytes(f.toPath()));
                 }
             }
         }catch (Exception e){

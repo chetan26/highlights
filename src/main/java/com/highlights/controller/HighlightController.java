@@ -79,7 +79,7 @@ public class HighlightController {
         return highlightService.getAllUserHighlights();
     }
 
-    @GetMapping(value = "/html/{contentId}")
+    @GetMapping(value = "/html/{contentId}",produces = MediaType.TEXT_PLAIN_VALUE)
     public String getContent(@PathVariable(value="contentId")String contentId){
         return highlightService.getContent(contentId,"html");
     }
