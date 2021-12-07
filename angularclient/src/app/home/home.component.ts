@@ -59,4 +59,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     //TODO: Ask Pankaj for help changing this
     return 'http://localhost:8080/assets/' + data.id + '/' + data.imgUrl;
   }
+
+  getHighlightImage(data: HighlightData): string {
+    //return '/assets/contents/' + data.id + '/' + data.imgUrl;
+    //TODO: Ask Pankaj for help changing this
+    return 'http://localhost:8080/assets/' + data.contentImgUrl;
+  }
 }

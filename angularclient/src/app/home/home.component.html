@@ -17,14 +17,13 @@
       </ng-container>
     </div>
     <div class="grow highlight">
-      <h3>Your Top Highlight</h3>
+      <h3>Highlight</h3>
       <ng-container *ngFor="let info of viewContent">
         <br />
+        <img src="{{ getHighlightImage(info) }}" alt="" />
         <a href="{{ getContentUrlC(info) }}">{{ info.contentTitle }}</a>
-        <p *ngIf="info.type == 'html'">{{ info.text }}</p>
-        <p class="createDate">
-          Created on: {{ info.createdOn | date: "medium" }}
-        </p>
+        <blockquote *ngIf="info.type == 'html'">{{info.text}}</blockquote>
+        <p class='createDate'>Created on: {{info.createdOn | date:'medium' }}</p>
       </ng-container>
     </div>
   </div>
