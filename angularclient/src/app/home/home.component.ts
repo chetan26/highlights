@@ -9,18 +9,21 @@ import { ContentDetails, HighlightData } from '../html-data';
 })
 export class HomeComponent implements OnInit {
   data: ContentDetails[] = [];
-  viewContent: HighlightData[] = [];
+  viewContent!: HighlightData;
   historyContent: HighlightData[] = [];
 
-  constructor(private _appService: AppService) {}
+  constructor(private _appService: AppService) {
+    this._appService.getNextHighlight().subscribe((response) => {
+      this.viewContent = response;
+      console.log(response);
+    });
+  }
 
   ngOnInit(): void {
     this._appService.availableContents().subscribe((response) => {
       this.data = response;
     });
-    this._appService.getNextHighlight().subscribe((response) => {
-      this.viewContent = response;
-    });
+
     this._appService.getUserHighlights().subscribe((response) => {
       this.historyContent = response;
     });

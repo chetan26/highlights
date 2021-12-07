@@ -33,4 +33,7 @@ export interface HighlightData {
   type: string;
   updatedOn?: string;
   userId?: string;
+  contentTitle?: string;
+  contentImgUrl?: string;
+  contentLaunchUrl?: string;
 }

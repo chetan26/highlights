@@ -18,10 +18,10 @@
     </div>
     <div class="grow highlight">
       <h3>Your Top Highlight</h3>
-      <ng-container *ngFor="let info of viewContent">
+      <ng-container>
         <br />
-        <h3>{{ info.context.note }}</h3>
-        <p *ngIf="info.type === 'html'">{{info.text}}</p>
+        <h3>{{ viewContent.contentTitle }}</h3>
+        <a href="{{ viewContent.contentLaunchUrl }}"></a>
       </ng-container>
     </div>
 

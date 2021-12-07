@@ -29,8 +29,8 @@ export class AppService {
     );
   }
 
-  getNextHighlight(): Observable<HighlightData[]> {
-    return this.http.get<HighlightData[]>(baseUrl + '/highlights/highlight');
+  getNextHighlight(): Observable<HighlightData> {
+    return this.http.get<HighlightData>(baseUrl + '/highlights/highlight');
   }
 
   getUserHighlights(): Observable<HighlightData[]> {
