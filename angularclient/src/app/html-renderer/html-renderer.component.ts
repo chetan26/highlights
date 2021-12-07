@@ -5,7 +5,7 @@ import {
   Renderer2,
   ViewChild,
 } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { AppService } from '../app.service';
 import { HighlightData } from '../html-data';
 
@@ -38,7 +38,6 @@ export class HtmlRendererComponent implements OnInit {
 
   constructor(
     private _appService: AppService,
-    private _router: Router,
     private _activatedRoute: ActivatedRoute,
     private _renderer: Renderer2
   ) {
@@ -82,21 +81,6 @@ export class HtmlRendererComponent implements OnInit {
 
   editHighlight(selectedHighlight: any): void {
     this.selectedHighlight = selectedHighlight;
-    this._renderer.setStyle(
-      this.highlightContentElement?.nativeElement,
-      'position',
-      'fixed'
-    );
-    this._renderer.setStyle(
-      this.highlightContentElement?.nativeElement,
-      'left',
-      '50%'
-    );
-    this._renderer.setStyle(
-      this.highlightContentElement?.nativeElement,
-      'top',
-      '50%'
-    );
     this._renderer.setProperty(
       this.highlightContentElement?.nativeElement,
       'hidden',
@@ -143,22 +127,6 @@ export class HtmlRendererComponent implements OnInit {
       }
 
       this.selectedText = this.selection.toString();
-
-      this._renderer.setStyle(
-        this.highlightContentElement?.nativeElement,
-        'position',
-        'fixed'
-      );
-      this._renderer.setStyle(
-        this.highlightContentElement?.nativeElement,
-        'top',
-        '50%'
-      );
-      this._renderer.setStyle(
-        this.highlightContentElement?.nativeElement,
-        'left',
-        '50%'
-      );
 
       if (this.selectedText) {
         this._renderer.setProperty(

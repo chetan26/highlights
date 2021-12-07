@@ -10,6 +10,7 @@ export interface ContentDetails {
   imgUrl: string;
   duration: string;
   highlights: number;
+  launchUrl?: string;
 }
 
 export interface HighlightData {

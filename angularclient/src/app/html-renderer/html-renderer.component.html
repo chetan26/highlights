@@ -1,5 +1,11 @@
 <app-header></app-header>
-<div></div>
+<div
+  *ngIf="currentHighlightsData?.length"
+  style="margin-left: 80%"
+  class="dropdown"
+>
+  <b>You have total : {{ currentHighlightsData?.length }} highlights</b>
+</div>
 <div
   #content
   (mousedown)="mouseDown()"
@@ -7,7 +13,11 @@
   [innerHtml]="data"
 ></div>
 
-<div style="width: 30px" #highlightContent hidden>
+<div
+  style="width: 30px; position: fixed; top: 50%; left: 50%"
+  #highlightContent
+  hidden
+>
   <textarea #noteDiv [(ngModel)]="note"></textarea>
   <div class="flex-row">
     <button
