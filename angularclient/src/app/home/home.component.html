@@ -21,6 +21,7 @@
       <ng-container *ngFor="let info of viewContent">
         <br />
         <img src="{{ getHighlightImage(info) }}" alt="" />
+        <br>
         <a href="{{ getContentUrlC(info) }}">{{ info.contentTitle }}</a>
         <blockquote *ngIf="info.type == 'html'">{{info.text}}</blockquote>
         <p class='createDate'>Created on: {{info.createdOn | date:'medium' }}</p>
