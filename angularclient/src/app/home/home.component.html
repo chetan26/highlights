@@ -2,7 +2,7 @@
 
 <section>
   <div class="flex">
-    <div class="grow available">
+    <div style="width: 70%" class="available">
       <h2>Recommended Content</h2>
       <ng-container *ngFor="let info of data">
         <div class="content {{ info.type }}">
@@ -14,19 +14,27 @@
         </div>
       </ng-container>
     </div>
-    <div class="grow highlight">
+    <div style="width: 30%" class="grow highlight">
       <h3>Highlight</h3>
       <ng-container *ngFor="let info of viewContent">
         <br />
         <img src="{{ getHighlightImage(info) }}" alt="" />
-        <br>
+        <br />
         <a href="{{ getContentUrlC(info) }}">{{ info.contentTitle }}</a>
-        <blockquote *ngIf="info.type == 'html'">{{info.text}}</blockquote>
-        <video *ngIf="info.type == 'video'" width="100" height="70" controls src="{{ getVideo(info) }}">
+        <blockquote *ngIf="info.type == 'html'">{{ info.text }}</blockquote>
+        <video
+          *ngIf="info.type == 'video'"
+          width="100"
+          height="70"
+          controls
+          src="{{ getVideo(info) }}"
+        >
           Your browser does not support the video tag.
         </video>
 
-        <p class='createDate'>Created on: {{info.createdOn | date:'medium' }}</p>
+        <p class="createDate">
+          Created on: {{ info.createdOn | date: "medium" }}
+        </p>
       </ng-container>
     </div>
   </div>
