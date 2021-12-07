@@ -64,6 +64,7 @@ public class HighlightService {
             }
             highlight.setUpdatedOn(Instant.now().toString());
             highlight.setUserId(loggedInUser);
+            highlight.setAccessed(false);
             highlightsRepository.save(highlight);
         } else {
             Highlight high = Highlight.HighlightBuilder.aHighlight()
@@ -78,6 +79,7 @@ public class HighlightService {
                     .withType(highlightData.getType())
                     .withUserId(loggedInUser)
                     .build();
+            highlight.setAccessed(false);
             highlightsRepository.save(high);
         }
     }
@@ -141,5 +143,11 @@ public class HighlightService {
             return highlight;
         }
         return null;
+    }
+
+    public List<Highlight> getAllUserHighlights(){
+        String loggedInUser=(String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<List<Highlight>> highlights = highlightsRepository.findByUserIdAndAccessedFalse(loggedInUser,Sort.by(Sort.Direction.ASC, "createdOn"));
+        return highlights.get();
     }
 }
