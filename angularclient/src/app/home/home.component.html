@@ -20,9 +20,8 @@
       <h3>Your Top Highlight</h3>
       <ng-container *ngFor="let info of viewContent">
         <br />
-        <!-- <h3>{{ info.id }}</h3> -->
         <h3>{{ info.context.note }}</h3>
-        <p *ngIf="info.type === 'html'">{{info.context.note}}</p>
+        <p *ngIf="info.type === 'html'">{{info.text}}</p>
       </ng-container>
     </div>
 
@@ -35,9 +34,8 @@
         <br />
         <ng-container *ngFor="let info of historyContent">
           <br />
-          <!-- <h3>{{ info.id }}</h3> -->
           <h3>{{ info.context.note }}</h3>
-          <p *ngIf="info.type === 'html'">{{info.context.note}}</p>
+          <p *ngIf="info.type === 'html'">{{info.text}}</p>
         </ng-container>
     </div>
   </div>

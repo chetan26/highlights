@@ -35,6 +35,11 @@ public class HighlightController {
         return highlightService.getAvailableContent();
     }
 
+    @GetMapping(value = "/content/{contentId}")
+    public Content getAvailableContent(@PathVariable(value="contentId")String contentId)  {
+        return highlightService.getContentById(contentId);
+    }
+
     @GetMapping(value = "highlight", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Highlight> getAllHighlight()  {
         return highlightService.getAllHighlights();

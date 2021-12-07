@@ -49,6 +49,12 @@ export class AppService {
     );
   }
 
+  getContent(contentId: string): Observable<ContentDetails> {
+    return this.http.get<ContentDetails>(
+      baseUrl + '/highlights/content/'+ contentId
+    );
+  }
+
   saveHighLightedText(data: HighlightData): Observable<any> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
     return this.http.post<any>(

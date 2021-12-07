@@ -149,4 +149,9 @@ public class HighlightService {
         Optional<List<Highlight>> highlights = highlightsRepository.findByUserIdAndAccessedFalse(loggedInUser,Sort.by(Sort.Direction.ASC, "createdOn"));
         return highlights.get();
     }
+
+    public Content getContentById(String contentId){
+        Optional<Content> content = contentRepository.findById(contentId);
+        return content.isPresent()? content.get():null;
+    }
 }
