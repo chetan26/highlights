@@ -1,7 +1,16 @@
 package com.highlights.common.entity;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.ResolverStyle;
+import java.time.format.SignStyle;
+
+import static java.time.temporal.ChronoField.*;
 
 @Document("highlights")
 public class Highlight {
@@ -15,9 +24,32 @@ public class Highlight {
     private String type;
     private String source;
     private Trim trim;
-    public String createdOn;
-    public String updatedOn;
+    public LocalDateTime createdOn;
+    public LocalDateTime updatedOn;
     public boolean accessed;
+
+    @Transient
+    String contentTitle;
+    @Transient
+    String contentImgUrl;
+    @Transient
+    String contentLaunchUrl;
+
+    static DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+            .appendValue(YEAR, 4, 10, SignStyle.EXCEEDS_PAD)
+            .appendLiteral('-')
+            .appendValue(MONTH_OF_YEAR, 2)
+            .appendLiteral('-')
+            .appendValue(DAY_OF_MONTH, 2)
+            .appendLiteral(' ')
+            .appendValue(HOUR_OF_DAY, 2)
+            .appendLiteral(':')
+            .appendValue(MINUTE_OF_HOUR, 2)
+            .optionalStart()
+            .appendLiteral(':')
+            .appendValue(SECOND_OF_MINUTE, 2)
+            .toFormatter();
+
 
     public String getId() {
         return id;
@@ -84,18 +116,18 @@ public class Highlight {
     }
 
     public String getCreatedOn() {
-        return createdOn;
+        return createdOn.format(formatter);
     }
 
-    public void setCreatedOn(String createdOn) {
+    public void setCreatedOn(LocalDateTime createdOn) {
         this.createdOn = createdOn;
     }
 
     public String getUpdatedOn() {
-        return updatedOn;
+        return updatedOn.format(formatter);
     }
 
-    public void setUpdatedOn(String updatedOn) {
+    public void setUpdatedOn(LocalDateTime updatedOn) {
         this.updatedOn = updatedOn;
     }
 
@@ -111,9 +143,33 @@ public class Highlight {
 
     public void setAccessed(boolean accessed) { this.accessed = accessed; }
 
+    public String getContentTitle() {
+        return contentTitle;
+    }
+
+    public void setContentTitle(String contentTitle) {
+        this.contentTitle = contentTitle;
+    }
+
+    public String getContentImgUrl() {
+        return contentImgUrl;
+    }
+
+    public void setContentImgUrl(String contentImgUrl) {
+        this.contentImgUrl = contentImgUrl;
+    }
+
+    public String getContentLaunchUrl() {
+        return contentLaunchUrl;
+    }
+
+    public void setContentLaunchUrl(String contentLaunchUrl) {
+        this.contentLaunchUrl = contentLaunchUrl;
+    }
+
     public static final class HighlightBuilder {
-        public String createdOn;
-        public String updatedOn;
+        public LocalDateTime createdOn;
+        public LocalDateTime updatedOn;
         private String id;
         private String userId;
         private String contentId;
@@ -176,12 +232,12 @@ public class Highlight {
             return this;
         }
 
-        public HighlightBuilder withCreatedOn(String createdOn) {
+        public HighlightBuilder withCreatedOn(LocalDateTime createdOn) {
             this.createdOn = createdOn;
             return this;
         }
 
-        public HighlightBuilder withUpdatedOn(String updatedOn) {
+        public HighlightBuilder withUpdatedOn(LocalDateTime updatedOn) {
             this.updatedOn = updatedOn;
             return this;
         }
