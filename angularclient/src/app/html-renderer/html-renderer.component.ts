@@ -105,6 +105,8 @@ export class HtmlRendererComponent implements OnInit {
   }
 
   findTheIndexOfWord(): void {
+    const textWithOutSpace = this.data.replace(/(\r)/gm, '');
+
     if (
       this.selectedText ==
       this.data.substring(
@@ -117,6 +119,10 @@ export class HtmlRendererComponent implements OnInit {
       this.selectedWordIndex = this.data.indexOf(this.selectedText);
     } else if (this.data.indexOf(this.selectedTextWithHtml) != -1) {
       this.selectedWordIndex = this.data.indexOf(this.selectedTextWithHtml);
+    } else if (textWithOutSpace.indexOf(this.selectedTextWithHtml) != -1) {
+      this.selectedWordIndex = textWithOutSpace.indexOf(
+        this.selectedTextWithHtml
+      );
     } else {
       this.selectedWordIndex = null;
       this.hideTheDiv();
