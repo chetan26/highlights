@@ -15,7 +15,9 @@ import org.springframework.util.CollectionUtils;
 import java.io.File;
 import java.nio.file.Files;
 import java.time.Instant;
+
 import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,7 +60,7 @@ public class HighlightService {
             if (newContext != null) {
                 highlight.setContext(newContext);
             }
-            highlight.setUpdatedOn(Instant.now().toString());
+            highlight.setUpdatedOn(LocalDateTime.now());
             highlight.setUserId(loggedInUser);
             highlight.setAccessed(false);
             highlightsRepository.save(highlight);
@@ -66,7 +68,7 @@ public class HighlightService {
             Highlight high = Highlight.HighlightBuilder.aHighlight()
                     .withContentId(highlightData.getContentId())
                     .withContext(highlightData.getContext())
-                    .withCreatedOn(Instant.now().toString())
+                    .withCreatedOn(LocalDateTime.now())
                     .withId(highlightData.getId())
                     .withLocation(highlightData.getLocation())
                     .withSource(highlightData.getSource())
@@ -92,6 +94,10 @@ public class HighlightService {
         return highlightsRepository.findByContentId(contentId);
     }
 
+    public Optional<Content> getContentById(String contentId){
+        return contentRepository.findById(contentId);
+
+    }
     //used only for html content
     public String getContent(String contentId,String type){
         String output="";
@@ -129,17 +135,15 @@ public class HighlightService {
         highlightsRepository.deleteById(id);
     }
 
-    public List<Highlight> getNextHighlight(){
-        List<Highlight> highlightList = new ArrayList<Highlight>();
+    public Highlight getNextHighlight(){
         String loggedInUser=(String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<List<Highlight>> highlights = highlightsRepository.findByUserIdAndAccessedFalse(loggedInUser,Sort.by(Sort.Direction.ASC, "createdOn"));
         if(highlights.isPresent() && !CollectionUtils.isEmpty(highlights.get())){
             Highlight highlight = highlights.get().get(0);
-            highlight.setUpdatedOn(Instant.now().toString());
+            highlight.setUpdatedOn(LocalDateTime.now());
             highlight.setAccessed(true);
             highlightsRepository.save(highlight);
-            highlightList.add(highlight);
-            return highlightList;
+            return highlight;
         }
         return null;
     }
@@ -148,10 +152,5 @@ public class HighlightService {
         String loggedInUser=(String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<List<Highlight>> highlights = highlightsRepository.findByUserIdAndAccessedFalse(loggedInUser,Sort.by(Sort.Direction.ASC, "createdOn"));
         return highlights.get();
-    }
-
-    public Content getContentById(String contentId){
-        Optional<Content> content = contentRepository.findById(contentId);
-        return content.isPresent()? content.get():null;
     }
 }

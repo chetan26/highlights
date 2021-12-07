@@ -9,7 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+import java.util.Optional;
 
 
 /**
@@ -37,7 +37,7 @@ public class HighlightController {
 
     @GetMapping(value = "/content/{contentId}")
     public Content getAvailableContent(@PathVariable(value="contentId")String contentId)  {
-        return highlightService.getContentById(contentId);
+        return highlightService.getContentById(contentId).get();
     }
 
     @GetMapping(value = "highlight", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -75,8 +75,20 @@ public class HighlightController {
     }
 
     @GetMapping(value = "/highlight")
-    public List<Highlight> getNextHighlight()  {
-        return highlightService.getNextHighlight();
+    public Highlight getNextHighlight()  {
+        Highlight highlight = highlightService.getNextHighlight();
+        if(highlight == null)
+            return highlight;
+
+        Optional<Content> maybeContent = highlightService.getContentById(highlight.getContentId());
+        maybeContent.ifPresent(content -> {
+            highlight.setContentTitle(content.getTitle());
+            //TODO: fix this url in the db scripts
+            highlight.setContentImgUrl(content.getId() + '/' + content.getImgUrl());
+            highlight.setContentLaunchUrl(content.getLaunchUrl());
+        });
+
+        return highlight;
     }
 
     @GetMapping(value = "/me")
