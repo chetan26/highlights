@@ -30,7 +30,7 @@ export class AppService {
   }
 
   getNextHighlight(): Observable<HighlightData> {
-    return this.http.get<HighlightData>(baseUrl + '/highlights/highlight');
+    return this.http.get<HighlightData>(baseUrl + '/highlights/oneHighlight');
   }
 
   getUserHighlights(): Observable<HighlightData[]> {
@@ -51,7 +51,7 @@ export class AppService {
 
   getContent(contentId: string): Observable<ContentDetails> {
     return this.http.get<ContentDetails>(
-      baseUrl + '/highlights/content/'+ contentId
+      baseUrl + '/highlights/content/' + contentId
     );
   }
 

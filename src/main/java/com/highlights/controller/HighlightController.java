@@ -74,7 +74,7 @@ public class HighlightController {
         highlightService.saveHighlights(highlight);
     }
 
-    @GetMapping(value = "/highlight")
+    @GetMapping(value = "/oneHighlight")
     public Highlight getNextHighlight()  {
         Highlight highlight = highlightService.getNextHighlight();
         if(highlight == null)

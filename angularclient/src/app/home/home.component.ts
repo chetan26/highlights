@@ -1,32 +1,49 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subject } from 'rxjs';
 import { AppService } from '../app.service';
 import { ContentDetails, HighlightData } from '../html-data';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   data: ContentDetails[] = [];
   viewContent!: HighlightData;
   historyContent: HighlightData[] = [];
 
-  constructor(private _appService: AppService) {
-    this._appService.getNextHighlight().subscribe((response) => {
-      this.viewContent = response;
-      console.log(response);
-    });
-  }
+  componentDestroyed$: Subject<boolean> = new Subject();
+
+  constructor(private _appService: AppService) {}
 
   ngOnInit(): void {
-    this._appService.availableContents().subscribe((response) => {
-      this.data = response;
-    });
+    this._appService
+      .getNextHighlight()
+      .pipe(takeUntil(this.componentDestroyed$))
+      .subscribe((response) => {
+        this.viewContent = response;
+        console.log(response);
+      });
+    this._appService
+      .availableContents()
+      .pipe(takeUntil(this.componentDestroyed$))
+      .subscribe((response) => {
+        this.data = response;
+      });
 
-    this._appService.getUserHighlights().subscribe((response) => {
-      this.historyContent = response;
-    });
+    this._appService
+      .getUserHighlights()
+      .pipe(takeUntil(this.componentDestroyed$))
+      .subscribe((response) => {
+        this.historyContent = response;
+      });
+  }
+
+  ngOnDestroy() {
+    this.componentDestroyed$.next(true);
+    this.componentDestroyed$.complete();
   }
 
   getContentUrl(data: ContentDetails): string {
@@ -39,4 +56,3 @@ export class HomeComponent implements OnInit {
     return 'http://localhost:8080/assets/' + data.id + '/' + data.imgUrl;
   }
 }
-
