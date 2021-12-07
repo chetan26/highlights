@@ -14,9 +14,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.io.File;
 import java.nio.file.Files;
-import java.time.Instant;
 
-import java.util.ArrayList;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -125,7 +123,7 @@ public class HighlightService {
     }
 
     public List<Highlight> getHighlightByUserId(String userId){
-        return highlightsRepository.findByUserId(userId);
+        return highlightsRepository.findByUserId(userId,Sort.by(Sort.Direction.ASC, "createdOn"));
     }
 
     public List<Highlight> getAllHighlights(){
@@ -145,12 +143,25 @@ public class HighlightService {
             highlightsRepository.save(highlight);
             return highlight;
         }
-        return null;
+        //when all highlights are accessed, refresh access status and return oldest highlight
+        else{
+            List<Highlight> all = highlightsRepository.findByUserId(loggedInUser,Sort.by(Sort.Direction.ASC, "createdOn"));
+            if(!CollectionUtils.isEmpty(all)){
+                all.forEach(highlight -> {
+                    highlight.setAccessed(false);
+                });
+                highlightsRepository.saveAll(all);
+                Highlight oldest = all.get(0);
+                oldest.setAccessed(true);
+                highlightsRepository.save(oldest);
+                return oldest;
+            }
+            return null;
+        }
     }
 
     public List<Highlight> getAllUserHighlights(){
         String loggedInUser=(String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<List<Highlight>> highlights = highlightsRepository.findByUserIdAndAccessedFalse(loggedInUser,Sort.by(Sort.Direction.ASC, "createdOn"));
-        return highlights.get();
+        return highlightsRepository.findByUserId(loggedInUser,Sort.by(Sort.Direction.ASC, "createdOn"));
     }
 }
