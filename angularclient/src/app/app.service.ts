@@ -32,13 +32,7 @@ export class AppService {
   }
 
   getNextHighlight(): Observable<HighlightData> {
-    return this.http.get<HighlightData>(
-      baseUrl + '/highlights/highlight'
-    );
-  }
-
-  changeResponseData(data: any) {
-    this.responseData = data;
+    return this.http.get<HighlightData>(baseUrl + '/highlights/highlight');
   }
 
   availableContents(): Observable<ContentDetails[]> {
