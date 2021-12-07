@@ -15,6 +15,7 @@ import org.springframework.util.CollectionUtils;
 import java.io.File;
 import java.nio.file.Files;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -128,7 +129,8 @@ public class HighlightService {
         highlightsRepository.deleteById(id);
     }
 
-    public Highlight getNextHighlight(){
+    public List<Highlight> getNextHighlight(){
+        List<Highlight> highlightList = new ArrayList<Highlight>();
         String loggedInUser=(String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<List<Highlight>> highlights = highlightsRepository.findByUserIdAndAccessedFalse(loggedInUser,Sort.by(Sort.Direction.ASC, "createdOn"));
         if(highlights.isPresent() && !CollectionUtils.isEmpty(highlights.get())){
@@ -136,7 +138,8 @@ public class HighlightService {
             highlight.setUpdatedOn(Instant.now().toString());
             highlight.setAccessed(true);
             highlightsRepository.save(highlight);
-            return highlight;
+            highlightList.add(highlight);
+            return highlightList;
         }
         return null;
     }

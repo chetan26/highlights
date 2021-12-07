@@ -9,19 +9,20 @@ import { ContentDetails, HighlightData } from '../html-data';
 })
 export class HomeComponent implements OnInit {
   data: ContentDetails[] = [];
-  viewContent: ContentDetails[] = [];
-  //highlight: HighlightData = undefined;
+  viewContent: HighlightData[] = [];
+  historyContent: HighlightData[] = [];
+
   constructor(private _appService: AppService) {}
 
   ngOnInit(): void {
     this._appService.availableContents().subscribe((response) => {
       this.data = response;
     });
-    this._appService.getViewContent().subscribe((response) => {
+    this._appService.getNextHighlight().subscribe((response) => {
       this.viewContent = response;
     });
-    this._appService.getNextHighlight().subscribe((response) => {
-      //this.highlight = response;
+    this._appService.getUserHighlights().subscribe((response) => {
+      this.historyContent = response;
     });
   }
 
@@ -35,3 +36,4 @@ export class HomeComponent implements OnInit {
     return 'http://localhost:8080/assets/' + data.id + '/' + data.imgUrl;
   }
 }
+

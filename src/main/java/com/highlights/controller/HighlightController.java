@@ -70,7 +70,7 @@ public class HighlightController {
     }
 
     @GetMapping(value = "/highlight")
-    public Highlight getNextHighlight()  {
+    public List<Highlight> getNextHighlight()  {
         return highlightService.getNextHighlight();
     }
 

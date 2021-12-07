@@ -18,18 +18,28 @@
       </ng-container>
     </div>
     <div class="grow highlight">
-      <h3>Your Highlight</h3>
-      <ng-container *ngFor="let info of data">
+      <h3>Your Top Highlight</h3>
+      <ng-container *ngFor="let info of viewContent">
         <br />
-        <a href="{{ getContentUrl(info) }}">{{ info.title }}</a>
+        <!-- <h3>{{ info.id }}</h3> -->
+        <h3>{{ info.context.note }}</h3>
+        <p *ngIf="info.type === 'html'">{{info.context.note}}</p>
       </ng-container>
     </div>
+
   </div>
 </section>
 <section>
   <div class="flex">
     <div class="grow available">
-      <h2>History</h2>
+      <h2>Highlight History</h2>
+        <br />
+        <ng-container *ngFor="let info of historyContent">
+          <br />
+          <!-- <h3>{{ info.id }}</h3> -->
+          <h3>{{ info.context.note }}</h3>
+          <p *ngIf="info.type === 'html'">{{info.context.note}}</p>
+        </ng-container>
     </div>
   </div>
 </section>
