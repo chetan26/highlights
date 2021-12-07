@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AppService } from '../app.service';
-import { ContentDetails } from '../html-data';
+import { ContentDetails, HighlightData } from '../html-data';
 
 @Component({
   selector: 'app-home',
@@ -10,6 +10,7 @@ import { ContentDetails } from '../html-data';
 export class HomeComponent implements OnInit {
   data: ContentDetails[] = [];
   viewContent: ContentDetails[] = [];
+  //highlight: HighlightData = undefined;
   constructor(private _appService: AppService) {}
 
   ngOnInit(): void {
@@ -19,6 +20,9 @@ export class HomeComponent implements OnInit {
     this._appService.getViewContent().subscribe((response) => {
       this.viewContent = response;
     });
+    this._appService.getNextHighlight().subscribe((response) => {
+      //this.highlight = response;
+    });
   }
 
   getContentUrl(data: ContentDetails): string {
@@ -27,17 +31,7 @@ export class HomeComponent implements OnInit {
 
   getContentThumbnail(data: ContentDetails): string {
     //return '/assets/contents/' + data.id + '/' + data.imgUrl;
-
     //TODO: Ask Pankaj for help changing this
-    return 'http://localhost:8080/assets/contents/' + data.id + '/' + data.imgUrl;
+    return 'http://localhost:8080/assets/' + data.id + '/' + data.imgUrl;
   }
-
-  /*getContentFiletype(data: ContentDetails): string {
-
-    //TODO: Ask Pankaj for help changing this localhost hard-coding
-    if (data.type === 'video') return '/assets/video.png';
-    if (data.type === 'pdf') return '/assets/pdf.png';
-    else return '/assets/html.png';
-  }
-  */
 }
