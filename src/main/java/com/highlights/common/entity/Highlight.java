@@ -124,7 +124,10 @@ public class Highlight {
     }
 
     public String getUpdatedOn() {
-        return updatedOn.format(formatter);
+        if(updatedOn != null) {
+            return updatedOn.format(formatter);
+        }
+        return null;
     }
 
     public void setUpdatedOn(LocalDateTime updatedOn) {
