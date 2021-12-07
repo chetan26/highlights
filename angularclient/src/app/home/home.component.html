@@ -20,24 +20,25 @@
       <h3>Your Top Highlight</h3>
       <ng-container *ngFor="let info of viewContent">
         <br />
-        <a href="{{ '/'+info.contentLaunchUrl }}">{{ info.contentTitle }}</a>
-        <p *ngIf="info.type == 'html'">{{info.text}}</p>
-        <p class='createDate'>Created on: {{info.createdOn | date:'medium' }}</p>
+        <a href="{{ getContentUrlC(info) }}">{{ info.contentTitle }}</a>
+        <p *ngIf="info.type == 'html'">{{ info.text }}</p>
+        <p class="createDate">
+          Created on: {{ info.createdOn | date: "medium" }}
+        </p>
       </ng-container>
     </div>
-
   </div>
 </section>
 <section>
   <div class="flex">
     <div class="grow available">
       <h2>Highlight History</h2>
+      <br />
+      <ng-container *ngFor="let info of historyContent">
         <br />
-        <ng-container *ngFor="let info of historyContent">
-          <br />
-          <h3>{{ info.context.note }}</h3>
-          <p *ngIf="info.type === 'html'">{{info.text}}</p>
-        </ng-container>
+        <h3>{{ info.context.note }}</h3>
+        <p *ngIf="info.type === 'html'">{{ info.text }}</p>
+      </ng-container>
     </div>
   </div>
 </section>

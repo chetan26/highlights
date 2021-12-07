@@ -50,6 +50,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     return '/' + data.type + '/' + data.id;
   }
 
+  getContentUrlC(data: HighlightData) {
+    return '/' + data.type + '/' + data.contentId;
+  }
+
   getContentThumbnail(data: ContentDetails): string {
     //return '/assets/contents/' + data.id + '/' + data.imgUrl;
     //TODO: Ask Pankaj for help changing this
