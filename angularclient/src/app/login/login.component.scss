@@ -1,6 +1,9 @@
 .center {
   margin-top: 10%;
   text-align: center;
+  display: inline-block;
+  background-color: aliceblue;
+  border-radius: 10px;
 }
 
 flex-column {
@@ -14,9 +17,20 @@ flex-column {
 }
 
 .bold {
-  font-weight: bold;
+  font-weight: bolder;
 }
 
-.maring-top-10 {
+.margin-top-10 {
   margin-top: 10px;
+}
+
+input {
+  border-radius: 8px;
+  margin: 0 10px;
+  border: 2px solid #00C6E0;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid #00C6E0;
 }
