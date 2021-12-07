@@ -11,7 +11,7 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class HomeComponent implements OnInit, OnDestroy {
   data: ContentDetails[] = [];
-  viewContent!: HighlightData;
+  viewContent: HighlightData[] = [];
   historyContent: HighlightData[] = [];
 
   componentDestroyed$: Subject<boolean> = new Subject();
@@ -23,7 +23,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       .getNextHighlight()
       .pipe(takeUntil(this.componentDestroyed$))
       .subscribe((response) => {
-        this.viewContent = response;
+        this.viewContent.push(response);
         console.log(response);
       });
     this._appService

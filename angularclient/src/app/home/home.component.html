@@ -18,10 +18,11 @@
     </div>
     <div class="grow highlight">
       <h3>Your Top Highlight</h3>
-      <ng-container>
+      <ng-container *ngFor="let info of viewContent">
         <br />
-        <h3>{{ viewContent.contentTitle }}</h3>
-        <a href="{{ viewContent.contentLaunchUrl }}"></a>
+        <a href="{{ '/'+info.contentLaunchUrl }}">{{ info.contentTitle }}</a>
+        <p *ngIf="info.type == 'html'">{{info.text}}</p>
+        <p class='createDate'>Created on: {{info.createdOn | date:'medium' }}</p>
       </ng-container>
     </div>
 
