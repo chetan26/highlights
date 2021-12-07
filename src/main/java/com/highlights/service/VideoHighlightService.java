@@ -34,6 +34,7 @@ public class VideoHighlightService implements HighlightDataService {
            long seconds = (date.getTime() - reference.getTime()) / 1000L;
            System.out.println(seconds);
            String updatedTo="00:00:"+String.valueOf(seconds);
+           //date conversion
 
            String videoPath = contentRepoLocation+ File.separator+finalContentLocation;
            String outputFileName = contentRepoLocation+"/highlights/"+highlight.getId()+".mp4";

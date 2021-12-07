@@ -102,11 +102,7 @@ ngOnInit(): void {
         document.getElementsByTagName("video")[0].currentTime = 250;
       }
 
-      // getContentThumbnail(data: ContentDetails): string {
-      //   //return '/assets/contents/' + data.id + '/' + data.imgUrl;
-      //   //TODO: Ask Pankaj for help changing this
-      //   return 'http://localhost:8080/assets/' + data.id + '/' + data.imgUrl;
-      // }
+
   }
 
 
