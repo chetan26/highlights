@@ -11,5 +11,6 @@ h2 {
 
 .selector {
   background-image: url("http://localhost:8080/assets/common/Hackathon_8.0.png");
-  object-fit: cover;
+  background-repeat: no-repeat;
+  background-size: cover;
  }

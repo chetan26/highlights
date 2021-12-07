@@ -80,3 +80,55 @@ header>div {
   color: #808080;
   font-style: italic;
 }
+
+.highlight {
+  padding: 20px;
+  padding-left: 40px;
+  background-color: aliceblue;
+  border-radius: 15px;
+}
+
+.createDate {
+  color: #808080;
+}
+
+blockquote{
+  font-size: 1.4em;
+  width:50%;
+  margin:50px auto;
+  font-family:Open Sans;
+  font-style:italic;
+  color: #555555;
+  padding:1em 10px 1em 75px;
+  border-left:4px solid #78C0A8 ;
+  line-height:1;
+  position: relative;
+  background:#EDEDED;
+}
+
+blockquote::before{
+  font-family:Arial;
+  content: "\201C";
+  color:#78C0A8;
+  font-size:4em;
+  position: absolute;
+  left: 10px;
+  top:-10px;
+}
+
+blockquote::after{
+  content: '';
+}
+
+blockquote span{
+  display:block;
+  color:#333333;
+  font-style: normal;
+  font-weight: bold;
+  margin-top:1em;
+}
+
+.highlight img{
+  width: 90px;
+  height: 55px;
+}

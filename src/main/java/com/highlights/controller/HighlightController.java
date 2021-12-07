@@ -84,7 +84,7 @@ public class HighlightController {
         maybeContent.ifPresent(content -> {
             highlight.setContentTitle(content.getTitle());
             //TODO: fix this url in the db scripts
-            highlight.setContentImgUrl(content.getId() + '/' + content.getImgUrl());
+            highlight.setContentImgUrl(content.getImgUrl());
             highlight.setContentLaunchUrl(content.getLaunchUrl());
         });
 

@@ -1,7 +1,5 @@
 <app-header></app-header>
-<header>
-  <div></div>
-</header>
+
 <section>
   <div class="flex">
     <div class="grow available">
@@ -17,14 +15,18 @@
       </ng-container>
     </div>
     <div class="grow highlight">
-      <h3>Your Top Highlight</h3>
+      <h3>Highlight</h3>
       <ng-container *ngFor="let info of viewContent">
         <br />
+        <img src="{{ getHighlightImage(info) }}" alt="" />
+        <br>
         <a href="{{ getContentUrlC(info) }}">{{ info.contentTitle }}</a>
-        <p *ngIf="info.type == 'html'">{{ info.text }}</p>
-        <p class="createDate">
-          Created on: {{ info.createdOn | date: "medium" }}
-        </p>
+        <blockquote *ngIf="info.type == 'html'">{{info.text}}</blockquote>
+        <video *ngIf="info.type == 'video'" width="100" height="70" controls src="{{ getVideo(info) }}">
+          Your browser does not support the video tag.
+        </video>
+
+        <p class='createDate'>Created on: {{info.createdOn | date:'medium' }}</p>
       </ng-container>
     </div>
   </div>

@@ -1,25 +1,34 @@
-
-
+<app-header></app-header>
 <table *ngIf="launchUrl" border="true">
   <tr>
     <td>
-      <video width="600" controls="controls"  id="video" preload="metadata">
-        <source src="{{launchUrl }}" type="video/mp4"/>
+      <video width="600" controls="controls" id="video" preload="metadata">
+        <source src="{{ launchUrl }}" type="video/mp4" />
       </video>
     </td>
   </tr>
 
   <tr>
     <td align="center">
-      <button id="start" (click)="bookmarkStartTime()" [disabled]="startDisabled">START</button>
-      <button id="stop"(click)="showSaveDialog()" [disabled]="stopDisabled">STOP</button></td>
+      <button
+        id="start"
+        (click)="bookmarkStartTime()"
+        [disabled]="startDisabled"
+      >
+        START
+      </button>
+      <button id="stop" (click)="showSaveDialog()" [disabled]="stopDisabled">
+        STOP
+      </button>
+    </td>
   </tr>
-
-
-
 </table>
 
-<div style="width: 30px; position:fixed ; top: 60%;left: 30%;" #highlightContent hidden>
+<div
+  style="width: 30px; position: fixed; top: 60%; left: 30%"
+  #highlightContent
+  hidden
+>
   <textarea #noteDiv [(ngModel)]="note"></textarea>
   <div class="flex-row">
     <button
@@ -32,6 +41,3 @@
     <button class="button-cancel" (click)="hideTheDiv()">Cancel</button>
   </div>
 </div>
-
-
-
