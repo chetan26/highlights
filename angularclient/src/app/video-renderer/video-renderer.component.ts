@@ -72,8 +72,11 @@ ngOnInit(): void {
       var to = this.convertTime(this.bookMarkStopTime);
 
       console.log("START TIME IS "+from +"END TIME IS "+to);
+      var res=new Date().getTime().toString();
+      console.log("highlight id is "+res);
       const data = {
         contentId: this.contentId,
+        id:'highlight'+res,
         context: {
           note: this.note,
         },
@@ -92,6 +95,7 @@ ngOnInit(): void {
       this._appService.saveHighLightedText(data).subscribe((response) => {
         this.startDisabled=false;
         this.stopDisabled=true;
+        this.hideTheDiv();
       });
     }
       seekTime(): void{

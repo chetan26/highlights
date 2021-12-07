@@ -7,6 +7,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * @author curkudkar on 12/5/21
@@ -22,13 +25,21 @@ public class VideoHighlightService implements HighlightDataService {
        try {
            String contentRepoLocation = HighlightsApplicationContext.getApplicationContext().getEnvironment().getProperty("com.highlights.content.basePath", "/resources");
 
-           String from = highlight.getTrim().getFrom();
-           String to = highlight.getTrim().getTo();
+           String from = "00:"+highlight.getTrim().getFrom();
+           String to = "00:"+highlight.getTrim().getTo();
+
+           DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+           Date reference = dateFormat.parse(from);
+           Date date = dateFormat.parse(to);
+           long seconds = (date.getTime() - reference.getTime()) / 1000L;
+           System.out.println(seconds);
+           String updatedTo="00:00:"+String.valueOf(seconds);
+
            String videoPath = contentRepoLocation+ File.separator+finalContentLocation;
-           String outputFileName = contentRepoLocation+File.separator+"highlights"+File.separator+highlight.getId()+".mp4";
+           String outputFileName = contentRepoLocation+"/highlights/"+highlight.getId()+".mp4";
 
 
-           String[] ffmpeg = new String[]{"ffmpeg", "-ss", from, "-i", videoPath, "-to", to, "-c", "copy", outputFileName};
+           String[] ffmpeg = new String[]{"ffmpeg", "-ss", from, "-i", videoPath, "-to", updatedTo, "-c", "copy", outputFileName};
            System.out.println("trim video");
            Process p = Runtime.getRuntime().exec(ffmpeg);
        }catch (Exception e){
