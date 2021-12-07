@@ -1,17 +1,16 @@
 <app-header></app-header>
 <header>
-  <div>
-  </div>
+  <div></div>
 </header>
 <section>
   <div class="flex">
     <div class="grow available">
       <h2>Recommended Content</h2>
       <ng-container *ngFor="let info of data">
-        <div class="content {{info.type}}" >
+        <div class="content {{ info.type }}">
           <a href="{{ getContentUrl(info) }}">
-            <img src="{{ getContentThumbnail(info) }}" />
-            <br/>
+            <img src="{{ getContentThumbnail(info) }}" alt="" />
+            <br />
             <span>{{ info.title }}</span>
           </a>
         </div>
@@ -44,6 +43,4 @@
   </div>
 </section>
 
-<footer>
-
-</footer>
+<footer></footer>

@@ -13,10 +13,8 @@ export class AppService {
 
   constructor(private http: HttpClient) {}
 
-  authenticate(credentials: any, callback: any) {
-    this.http.post(baseUrl + '/login', credentials).subscribe((response) => {
-      return callback && callback();
-    });
+  authenticate(credentials: any): Observable<any> {
+    return this.http.post(baseUrl + '/login', credentials);
   }
 
   getHtmlData(contentId: string): Observable<any> {

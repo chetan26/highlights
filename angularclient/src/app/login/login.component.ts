@@ -21,9 +21,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   login() {
-    this._appService.authenticate(this.credentials, () => {
+    this._appService.authenticate(this.credentials).subscribe((response) => {
       this.router.navigateByUrl('/home');
     });
-    return false;
   }
 }
