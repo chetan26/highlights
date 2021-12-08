@@ -162,6 +162,20 @@ public class HighlightService {
 
     public List<Highlight> getAllUserHighlights(){
         String loggedInUser=(String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return highlightsRepository.findByUserId(loggedInUser,Sort.by(Sort.Direction.ASC, "createdOn"));
+        List<Highlight> highlights = highlightsRepository.findByUserId(loggedInUser,Sort.by(Sort.Direction.ASC, "createdOn"));
+
+        if(!CollectionUtils.isEmpty(highlights)){
+            highlights.forEach(highlight -> {
+                Optional<Content> maybeContent = getContentById(highlight.getContentId());
+                maybeContent.ifPresent(content -> {
+                    highlight.setContentTitle(content.getTitle());
+                    //TODO: fix this url in the db scripts
+                    highlight.setContentImgUrl(content.getId()+"/"+ content.getImgUrl());
+                    highlight.setContentLaunchUrl(content.getLaunchUrl());
+                });
+            });
+            return highlights;
+        }
+        return null;
     }
 }

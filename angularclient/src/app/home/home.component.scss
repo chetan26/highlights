@@ -99,7 +99,6 @@ header>div {
 .createDate {
   color: #808080;
   float: left;
-  margin: auto;
 }
 
 blockquote{
@@ -142,4 +141,10 @@ blockquote span{
 .highlight img{
   width: 90px;
   height: 55px;
+}
+
+video{
+  float: left;
+  display: block;
+  clear: left;
 }

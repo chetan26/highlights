@@ -44,15 +44,20 @@
 </section>
 <section>
   <div class="flex">
-    <div class="grow available">
+    <div>
       <h2>Highlight History</h2>
-      <br />
       <ng-container *ngFor="let info of historyContent">
+        <div>
         <br />
-        <a href="{{ getContentUrlC(info) }}">{{ info.contentTitle }}</a>
-        <blockquote *ngIf="info.type == 'html'">{{ info.text }}</blockquote>
-        <br>
-        <video
+        <a class="object-position: 10px; display: block;" href="{{ getContentUrlC(info) }}">{{ info.contentTitle }}</a>
+
+        <br /><p class="createDate">
+          Created on: {{ info.createdOn | date: "medium" }}
+        </p>
+
+        <!-- <blockquote *ngIf="info.type == 'html'">{{ info.text }}</blockquote>
+        <br />
+        <video class="display: block;"
           *ngIf="info.type == 'video'"
           width="240"
           height="110"
@@ -60,10 +65,10 @@
           src="{{ getVideo(info) }}"
         >
           Your browser does not support the video tag.
-        </video>
-        <br><br><br><br><p class="createDate">
-          Created on: {{ info.createdOn | date: "medium" }}
-        </p>
+        </video> -->
+      <br />
+    </div>
+    <br>
       </ng-container>
     </div>
   </div>
