@@ -2,6 +2,7 @@ package com.highlights.controller;
 
 import com.highlights.common.entity.Content;
 import com.highlights.common.entity.Highlight;
+import com.highlights.configuration.HighlightsApplicationContext;
 import com.highlights.service.ContentCreationService;
 import com.highlights.service.HighlightService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,7 +87,11 @@ public class HighlightController {
             highlight.setContentTitle(content.getTitle());
             //TODO: fix this url in the db scripts
             highlight.setContentImgUrl(content.getId()+"/"+ content.getImgUrl());
-            highlight.setContentLaunchUrl(content.getLaunchUrl());
+            if("video".equals(highlight.getType())) {
+                highlight.setContentLaunchUrl("/highlights/"+ highlight.getId() + ".mp4");
+            } else {
+                highlight.setContentLaunchUrl(content.getLaunchUrl());
+            }
         });
 
         return highlight;
