@@ -24,8 +24,11 @@
       <h3>Highlight</h3>
       <ng-container *ngFor="let info of viewContent">
         <img src="{{ getHighlightImage(info) }}" alt="" />
-        <br><a href="{{ getContentUrlC(info) }}">{{ info.contentTitle }}</a>
-        <blockquote *ngIf="info.type == 'html'">{{ info.text }}</blockquote>
+        <br /><a href="{{ getContentUrlC(info) }}">{{ info.contentTitle }}</a>
+        <blockquote
+          *ngIf="info.type == 'html'"
+          [innerHtml]="info.text"
+        ></blockquote>
         <video
           *ngIf="info.type == 'video'"
           width="240"
@@ -48,14 +51,19 @@
       <h2>Highlight History</h2>
       <ng-container *ngFor="let info of historyContent">
         <div>
-        <br />
-        <a class="object-position: 10px; display: block;" href="{{ getContentUrlC(info) }}">{{ info.contentTitle }}</a>
+          <br />
+          <a
+            class="object-position: 10px; display: block;"
+            href="{{ getContentUrlC(info) }}"
+            >{{ info.contentTitle }}</a
+          >
 
-        <br /><p class="createDate">
-          Created on: {{ info.createdOn | date: "medium" }}
-        </p>
+          <br />
+          <p class="createDate">
+            Created on: {{ info.createdOn | date: "medium" }}
+          </p>
 
-        <!-- <blockquote *ngIf="info.type == 'html'">{{ info.text }}</blockquote>
+          <!-- <blockquote *ngIf="info.type == 'html'">{{ info.text }}</blockquote>
         <br />
         <video class="display: block;"
           *ngIf="info.type == 'video'"
@@ -66,9 +74,9 @@
         >
           Your browser does not support the video tag.
         </video> -->
-      <br />
-    </div>
-    <br>
+          <br />
+        </div>
+        <br />
       </ng-container>
     </div>
   </div>
