@@ -26,10 +26,12 @@
         <img src="{{ getHighlightImage(info) }}" alt="" />
         <br /><a href="{{ getContentUrlC(info) }}">{{ info.contentTitle }}</a>
         <blockquote
+          [title]="info.context.note"
           *ngIf="info.type == 'html'"
           [innerHtml]="info.text"
         ></blockquote>
         <video
+          [title]="info.context.note"
           *ngIf="info.type == 'video'"
           width="240"
           height="110"
