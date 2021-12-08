@@ -2,7 +2,13 @@
 
 <section>
   <div class="flex">
-    <div style="width: 70%" class="available">
+    <div
+      [ngClass]="{
+        width70: viewContent?.length,
+        width100: !viewContent?.length
+      }"
+      class="available"
+    >
       <h2>Recommended Content</h2>
       <ng-container *ngFor="let info of data">
         <div class="content {{ info.type }}">
@@ -14,7 +20,7 @@
         </div>
       </ng-container>
     </div>
-    <div style="width: 30%" class="grow highlight">
+    <div *ngIf="viewContent?.length" style="width: 30%" class="grow highlight">
       <h3>Highlight</h3>
       <ng-container *ngFor="let info of viewContent">
         <img src="{{ getHighlightImage(info) }}" alt="" />

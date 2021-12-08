@@ -23,8 +23,15 @@ export class HomeComponent implements OnInit, OnDestroy {
       .getNextHighlight()
       .pipe(takeUntil(this.componentDestroyed$))
       .subscribe((response) => {
-        this.viewContent.push(response);
-        console.log(response);
+        if (response) {
+          if (response instanceof Array) {
+            if (response.length) {
+              this.viewContent.push(response);
+            }
+          } else {
+            this.viewContent.push(response);
+          }
+        }
       });
     this._appService
       .availableContents()
